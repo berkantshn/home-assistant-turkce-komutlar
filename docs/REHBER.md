@@ -54,7 +54,7 @@ Büyük İ ile başlayan adlarda ("İkinci Lamba") testte böyle bir sorun gör�
 ## Kendi cümleni eklemek
 
 `custom_sentences/tr/` altına yeni bir dosya açın, paket dosyalarını değiştirmek zorunda kalmazsınız, sonraki sürümde üzerine yazılmaz:
-nBu bölümdeki örnek bir şablondur ve test edilmemiştir; kendi sisteminizde deneyin.
+Bu bölümdeki örnek bir şablondur ve test edilmemiştir; kendi sisteminizde deneyin.
 
 ```yaml
 language: "tr"
