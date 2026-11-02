@@ -1,0 +1,210 @@
+# Made By FALCREB
+# Saat, tarih, hava durumu, alışveriş listesi, zamanlayıcı ek komutları, sohbet.
+# Üst projede saat, tarih, hava, liste, duraklatma ve süre ekleme için Türkçe
+# cümle yoktur. Zamanlayıcıda yalnızca başlatma ve iptal bulunur.
+language: "tr"
+
+expansion_rules:
+  sayac_ad: "(zamanlayıcı|sayaç)"
+  sayac_i: "(zamanlayıcıyı|sayacı)"
+  sayac_a: "(zamanlayıcıya|sayaca)"
+  sayac_da: "(zamanlayıcıda|sayaçta)"
+  sayac_dan: "(zamanlayıcıdan|sayaçtan)"
+  kur_fiil: "(kur|kurar mısın|kurabilir misin|başlat|başlatır mısın|başlatabilir misin|ayarla|ayarlar mısın)"
+
+intents:
+  HassGetCurrentTime:
+    data:
+      - sentences:
+          - "saat kaç[(ta|tır)]"
+          - "saat kaç oldu"
+          - "saati söyle[r misin]"
+          - "saati söyleyebilir misin"
+        response: "default"
+
+  HassGetCurrentDate:
+    data:
+      - sentences:
+          - "bugün[ün] tarih[i] (ne|nedir)"
+          - "tarih (ne|nedir)"
+          - "bugün ayın kaçı"
+          - "ayın kaçındayız"
+          - "bugün günlerden ne"
+          - "bugün (ne|hangi) gün"
+          - "hangi gündeyiz"
+        response: "default"
+
+  HassGetWeather:
+    data:
+      - sentences:
+          - "[(bugün|şu an|şimdi)] hava (nasıl|durumu|durumu nasıl|durumu ne|kaç derece)"
+          - "[(bugün|şu an|şimdi)] dışarısı (nasıl|kaç derece)"
+          - "[(bugün|şu an|şimdi)] dışarıda hava (nasıl|kaç derece)"
+        response: "default"
+      - sentences:
+          - "{name} [hava] [durumu] nasıl"
+        requires_context:
+          domain:
+            - "weather"
+        response: "default"
+
+  HassShoppingListAddItem:
+    data:
+      - sentences:
+          - "(alışveriş listesine|alışveriş listeme|listeme) {shopping_list_item:item} (ekle|ekler misin|yaz|yazar misin|yazar mısın)"
+          - "{shopping_list_item:item} (alışveriş listesine|alışveriş listeme|listeme) (ekle|ekler misin|yaz|yazar misin|yazar mısın)"
+        response: "eklendi"
+
+  HassShoppingListCompleteItem:
+    data:
+      - sentences:
+          - "(alışveriş listesinde|alışveriş listemde) {shopping_list_item:item} (tamamlandı|alındı|tamam)"
+          - "(alışveriş listesinden|alışveriş listemden) {shopping_list_item:item} (işaretle|tamamla)"
+        response: "tamam"
+
+  HassStartTimer:
+    data:
+      # Üst proje "10 dakikalık zamanlayıcı kur" der; günlük konuşma biçimleri:
+      - sentences:
+          - "{timer_minutes:minutes} (dakika|dakikaya) <sayac_ad> <kur_fiil>"
+          - "<sayac_i> {timer_minutes:minutes} dakika <kur_fiil>"
+          - "<sayac_ad> <kur_fiil> {timer_minutes:minutes} (dakika|dakikaya)"
+          - "{timer_minutes:minutes} dakika say"
+          - "{timer_minutes:minutes} dakika sonra haber ver"
+        response: "sure"
+      - sentences:
+          - "{timer_seconds:seconds} (saniye|saniyeye) <sayac_ad> <kur_fiil>"
+          - "<sayac_i> {timer_seconds:seconds} saniye <kur_fiil>"
+          - "{timer_seconds:seconds} saniye say"
+          - "{timer_seconds:seconds} saniye sonra haber ver"
+        response: "sure"
+      - sentences:
+          - "{timer_hours:hours} (saat|saate) <sayac_ad> <kur_fiil>"
+          - "<sayac_i> {timer_hours:hours} saat <kur_fiil>"
+          - "{timer_hours:hours} saat sonra haber ver"
+        response: "sure"
+      # Bileşik süre: üst projede yok.
+      - sentences:
+          - "{timer_hours:hours} saat {timer_minutes:minutes} (dakikalık|dakika|dakikaya) <sayac_ad> <kur_fiil>"
+          - "<sayac_i> {timer_hours:hours} saat {timer_minutes:minutes} (dakika|dakikaya) <kur_fiil>"
+        response: "sure"
+      - sentences:
+          - "{timer_minutes:minutes} dakika {timer_seconds:seconds} (saniyelik|saniye|saniyeye) <sayac_ad> <kur_fiil>"
+          - "<sayac_i> {timer_minutes:minutes} dakika {timer_seconds:seconds} (saniye|saniyeye) <kur_fiil>"
+        response: "sure"
+
+  HassPauseTimer:
+    data:
+      - sentences:
+          - "<sayac_i> (duraklat|duraklatır mısın|beklet|bekletir misin)"
+        response: "default"
+
+  HassUnpauseTimer:
+    data:
+      - sentences:
+          - "<sayac_i> (sürdür|sürdürür müsün|devam ettir|tekrar başlat)"
+          - "<sayac_a> devam et"
+        response: "default"
+
+  HassTimerStatus:
+    data:
+      - sentences:
+          - "<sayac_da> [(ne kadar|kaç dakika|kaç saniye)] [(süre|zaman)] kaldı"
+          - "<sayac_ad> ne durumda"
+          - "<sayac_ad> (ne zaman|kaçta) bitecek"
+          - "kalan süre (ne kadar|nedir|kaç)"
+          - "ne kadar (süre|zaman) kaldı"
+        response: "default"
+
+  HassIncreaseTimer:
+    data:
+      - sentences:
+          - "<sayac_a> {timer_minutes:minutes} dakika [daha] (ekle|ekler misin)"
+          - "{timer_minutes:minutes} dakika daha (ekle|ekler misin)"
+        response: "default"
+      - sentences:
+          - "<sayac_a> {timer_seconds:seconds} saniye [daha] (ekle|ekler misin)"
+        response: "default"
+      - sentences:
+          - "<sayac_a> {timer_hours:hours} saat [daha] (ekle|ekler misin)"
+        response: "default"
+
+  HassDecreaseTimer:
+    data:
+      - sentences:
+          - "<sayac_dan> {timer_minutes:minutes} dakika (çıkar|azalt|düş|eksilt)"
+        response: "default"
+      - sentences:
+          - "<sayac_dan> {timer_seconds:seconds} saniye (çıkar|azalt|düş|eksilt)"
+        response: "default"
+      - sentences:
+          - "<sayac_dan> {timer_hours:hours} saat (çıkar|azalt|düş|eksilt)"
+        response: "default"
+
+  # Üst projede "önemli değil" ve "boşver" var; doğru yazım ve yaygın biçimler:
+  HassNevermind:
+    data:
+      - sentences:
+          - "boş ver"
+          - "(vazgeç|vazgeçtim)"
+          - "(neyse|unut gitsin|unut bunu)"
+          - "(iptal|İptal) [et]"
+        response: "default"
+
+  HassRespond:
+    data:
+      - sentences:
+          - "(teşekkürler|teşekkür ederim|sağ ol|sağol|eyvallah)"
+        response: "rica"
+      - sentences:
+          - "(merhaba|selam)"
+        response: "selam"
+
+responses:
+  intents:
+    HassGetCurrentTime:
+      default: "Saat {{ slots.time.hour }}:{{ '{0:02d}'.format(slots.time.minute) }}."
+    HassGetCurrentDate:
+      default: >
+        {% set aylar = {1:'Ocak',2:'Şubat',3:'Mart',4:'Nisan',5:'Mayıs',6:'Haziran',7:'Temmuz',8:'Ağustos',9:'Eylül',10:'Ekim',11:'Kasım',12:'Aralık'} %}
+        {% set gunler = ['Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi','Pazar'] %}
+        {{ slots.date.day }} {{ aylar[slots.date.month] }} {{ slots.date.year }}, {{ gunler[slots.date.weekday()] }}.
+    HassGetWeather:
+      default: >
+        {% set hava = {'clear':'açık','clear-night':'açık','cloudy':'bulutlu','exceptional':'olağandışı','fog':'sisli','hail':'dolu yağışlı','lightning':'şimşekli','lightning-rainy':'gök gürültülü sağanak','partlycloudy':'parçalı bulutlu','pouring':'sağanak yağışlı','rainy':'yağmurlu','snowy':'karlı','snowy-rainy':'karla karışık yağmurlu','sunny':'güneşli','windy':'rüzgarlı','windy-variant':'rüzgarlı ve bulutlu'} %}
+        {{ state.attributes.get('temperature') }} {{ state.attributes.get('temperature_unit') }}, {{ hava.get(state.state | string | lower, '') }}.
+    HassShoppingListAddItem:
+      eklendi: "{{ slots.item }} listeye eklendi."
+    HassShoppingListCompleteItem:
+      tamam: "{{ slots.item }} tamamlandı."
+    HassStartTimer:
+      sure: >
+        {% set parca = [] %}
+        {% if slots.hours is defined %}{% set parca = parca + [slots.hours ~ ' saat'] %}{% endif %}
+        {% if slots.minutes is defined %}{% set parca = parca + [slots.minutes ~ ' dakika'] %}{% endif %}
+        {% if slots.seconds is defined %}{% set parca = parca + [slots.seconds ~ ' saniye'] %}{% endif %}
+        {{ parca | join(' ') }} için zamanlayıcı başladı.
+    HassPauseTimer:
+      default: "Zamanlayıcı duraklatıldı."
+    HassUnpauseTimer:
+      default: "Zamanlayıcı devam ediyor."
+    HassTimerStatus:
+      default: >
+        {% set zaman = slots.timers | selectattr('is_active') | sort(attribute='total_seconds_left') | list %}
+        {% if slots.timers | length == 0 %}Çalışan zamanlayıcı yok.
+        {% elif zaman | length == 0 %}Zamanlayıcı duraklatılmış.
+        {% else %}
+          {% set t = zaman[0] %}
+          {% set p = [] %}
+          {% if t.rounded_hours_left %}{% set p = p + [t.rounded_hours_left ~ ' saat'] %}{% endif %}
+          {% if t.rounded_minutes_left %}{% set p = p + [t.rounded_minutes_left ~ ' dakika'] %}{% endif %}
+          {% if t.rounded_seconds_left %}{% set p = p + [t.rounded_seconds_left ~ ' saniye'] %}{% endif %}
+          {{ p | join(' ') }} kaldı.
+        {% endif %}
+    HassIncreaseTimer:
+      default: "Süre eklendi."
+    HassDecreaseTimer:
+      default: "Süre azaltıldı."
+    HassRespond:
+      rica: "Rica ederim."
+      selam: "Merhaba!"

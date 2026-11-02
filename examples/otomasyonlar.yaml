@@ -1,0 +1,57 @@
+# Made By FALCREB
+# Cümleyle tetiklenen otomasyon örnekleri. Niyetle yapılamayan, birkaç işi birden
+# yapan komutlar içindir. Kullanmadan önce entity_id değerlerini kendi evinize
+# göre değiştirin. Bu dosyadaki id'ler test ortamındaki sahte cihazlardır.
+#
+# Uyarı: Bir otomasyona kapı açma veya alarm kapatma eklemeyin. Sesle gelen komut
+# kimin söylediğini bilmez; dışarıdan bağıran biri de tetikleyebilir.
+
+- id: tr_iyi_geceler
+  alias: "TR: İyi geceler"
+  triggers:
+    - trigger: conversation
+      command:
+        # Cümle başındaki büyük İ, küçük i ile aynı sayılmaz; iki yazım da gerekli.
+        - "(iyi|İyi) geceler"
+        - "[ben] yatıyorum"
+        - "uyuyorum"
+  actions:
+    - action: light.turn_off
+      target:
+        entity_id:
+          - light.salon_lambasi
+          - light.mutfak_lambasi
+    - set_conversation_response: "İyi geceler, ışıkları kapattım."
+
+- id: tr_evden_cikiyorum
+  alias: "TR: Evden çıkıyorum"
+  triggers:
+    - trigger: conversation
+      command:
+        - "(evden|dışarı) çıkıyorum"
+        - "ben çıkıyorum"
+  actions:
+    - action: light.turn_off
+      target:
+        entity_id:
+          - light.salon_lambasi
+          - light.mutfak_lambasi
+    - action: switch.turn_off
+      target:
+        entity_id: switch.kahve_makinesi
+    - set_conversation_response: "Görüşürüz, ışıkları ve kahve makinesini kapattım."
+
+- id: tr_usudum
+  alias: "TR: Üşüdüm"
+  triggers:
+    - trigger: conversation
+      command:
+        - "üşüdüm"
+        - "(çok|biraz) üşüyorum"
+  actions:
+    - action: climate.set_temperature
+      target:
+        entity_id: climate.salon_klimasi
+      data:
+        temperature: 24
+    - set_conversation_response: "Sıcaklığı 24 dereceye aldım."

@@ -1,0 +1,64 @@
+# Made By FALCREB
+# Kör küme 2: paketi görmeden yazılmış 60 cümle. Kör küme 1'in sonuçlarına göre yapılan
+# düzeltmelerden sonra, ilk kez bir kez çalıştırılmıştır.
+cases:
+  - {group: heldout2, text: "Avizeyi yakar mısın", intent: HassTurnOn, device: false}
+  - {group: heldout2, text: "Mutfak lambasını söndür lütfen", intent: HassTurnOff, device: false}
+  - {group: heldout2, text: "Işığı açsana", intent: HassTurnOn, device: true}
+  - {group: heldout2, text: "Lambayı kapatır mısın", intent: HassTurnOff, device: true}
+  - {group: heldout2, text: "Yatak odasındaki abajuru yak", intent: HassTurnOn, device: false}
+  - {group: heldout2, text: "Salondaki ışıkları kapat", intent: HassTurnOff, device: false}
+  - {group: heldout2, text: "Abajurun ışığını söndürür müsün", intent: HassTurnOff, device: false}
+  - {group: heldout2, text: "Mutfağın ışığını açsana biraz", intent: HassTurnOn, device: false}
+  - {group: heldout2, text: "Salon lambası kapansın", intent: HassTurnOff, device: false}
+  - {group: heldout2, text: "Kahve makinesini çalıştır", intent: HassTurnOn, device: false}
+  - {group: heldout2, text: "Kahve makinesini kapatabilir misin", intent: HassTurnOff, device: false}
+  - {group: heldout2, text: "Prizi açar mısın", intent: HassTurnOn, device: false}
+  - {group: heldout2, text: "Şu prizi kapat", intent: HassTurnOff, device: false}
+  - {group: heldout2, text: "Tavan fanını çalıştır", intent: HassTurnOn, device: false}
+  - {group: heldout2, text: "Yatak odasındaki fanı durdur", intent: HassTurnOff, device: false}
+  - {group: heldout2, text: "Klimayı çalıştırsana", intent: HassTurnOn, device: true}
+  - {group: heldout2, text: "Salon klimasını kapat", intent: HassTurnOff, device: false}
+  - {group: heldout2, text: "Perdeyi aç", intent: HassTurnOn, device: true}
+  - {group: heldout2, text: "Salon perdesini kapatır mısın", intent: HassTurnOff, device: false}
+  - {group: heldout2, text: "Mutfaktaki panjuru indir", intent: HassTurnOff, device: false}
+  - {group: heldout2, text: "Panjuru açsana", intent: HassTurnOn, device: false}
+  - {group: heldout2, text: "Televizyonu aç", intent: HassTurnOn, device: false}
+  - {group: heldout2, text: "Televizyonu kapatır mısın", intent: HassTurnOff, device: false}
+  - {group: heldout2, text: "Film Gecesi sahnesini başlat", intent: HassTurnOn, device: false}
+  - {group: heldout2, text: "Avizenin parlaklığını yüzde 40 yap", intent: HassLightSet, device: false}
+  - {group: heldout2, text: "Abajuru kırmızı yapar mısın", intent: HassLightSet, device: false}
+  - {group: heldout2, text: "Işıkları yüzde 70 parlaklığa getir", intent: HassLightSet, device: true}
+  - {group: heldout2, text: "Mutfak lambasını mavi renge çevir", intent: HassLightSet, device: false}
+  - {group: heldout2, text: "Salon klimasını 23 dereceye ayarla", intent: HassClimateSetTemperature, device: false}
+  - {group: heldout2, text: "Klimayı 26 derece yap", intent: HassClimateSetTemperature, device: true}
+  - {group: heldout2, text: "Salonda hava kaç derece", intent: HassClimateGetTemperature, device: false}
+  - {group: heldout2, text: "Burası kaç derece şu an", intent: HassClimateGetTemperature, device: true}
+  - {group: heldout2, text: "Salon penceresi açık mı", intent: HassGetState, device: false}
+  - {group: heldout2, text: "Mutfaktaki nem oranı nedir", intent: HassGetState, device: false}
+  - {group: heldout2, text: "Mutfakta hareket var mı", intent: HassGetState, device: false}
+  - {group: heldout2, text: "Avize açık mı şu an", intent: HassGetState, device: false}
+  - {group: heldout2, text: "Tavan fanının hızını yüzde 50 yap", intent: HassFanSetSpeed, device: false}
+  - {group: heldout2, text: "Fanı yüzde 80 hıza ayarlar mısın", intent: HassFanSetSpeed, device: true}
+  - {group: heldout2, text: "Panjuru yüzde 30 aç", intent: HassSetPosition, device: false}
+  - {group: heldout2, text: "Perdeyi yüzde 50 kapat", intent: HassSetPosition, device: true}
+  - {group: heldout2, text: "Salon perdesini yüzde 75 konumuna getir", intent: HassSetPosition, device: false}
+  - {group: heldout2, text: "Televizyonu duraklat", intent: HassMediaPause, device: false}
+  - {group: heldout2, text: "Müziği durdur biraz", intent: HassMediaPause, device: true}
+  - {group: heldout2, text: "Hoparlörden devam et", intent: HassMediaUnpause, device: false}
+  - {group: heldout2, text: "Oynatmaya devam et", intent: HassMediaUnpause, device: true}
+  - {group: heldout2, text: "Sonraki şarkıya geç", intent: HassMediaNext, device: true}
+  - {group: heldout2, text: "Hoparlörde bir sonraki parçayı çal", intent: HassMediaNext, device: false}
+  - {group: heldout2, text: "Önceki şarkıya dön", intent: HassMediaPrevious, device: true}
+  - {group: heldout2, text: "Televizyonun sesini 25 yap", intent: HassSetVolume, device: false}
+  - {group: heldout2, text: "Sesi yüzde 40 yapar mısın", intent: HassSetVolume, device: true}
+  - {group: heldout2, text: "Hoparlörün sesini kıs", intent: HassSetVolumeRelative, device: false}
+  - {group: heldout2, text: "Sesi biraz aç", intent: HassSetVolumeRelative, device: true}
+  - {group: heldout2, text: "Televizyonu sessize al", intent: HassMediaPlayerMute, device: false}
+  - {group: heldout2, text: "Robot süpürgeyi çalıştır", intent: HassVacuumStart, device: false}
+  - {group: heldout2, text: "Süpürgeyi eve gönder", intent: HassVacuumReturnToBase, device: false}
+  - {group: heldout2, text: "Saat kaç", intent: HassGetCurrentTime, device: false}
+  - {group: heldout2, text: "Bugün ayın kaçı", intent: HassGetCurrentDate, device: false}
+  - {group: heldout2, text: "Hava durumu nasıl", intent: HassGetWeather, device: false}
+  - {group: heldout2, text: "Alışveriş listesine süt ekle", intent: HassShoppingListAddItem, device: false}
+  - {group: heldout2, text: "10 dakikalık sayaç kur", intent: HassStartTimer, device: false}

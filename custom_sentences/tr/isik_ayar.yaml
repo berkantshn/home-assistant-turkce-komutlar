@@ -1,0 +1,157 @@
+# Made By FALCREB
+# Parlaklık, renk ve ışık tonu (HassLightSet).
+# Üst projede bu niyet için Türkçe cümle ve yanıt yoktur.
+# "Kıs" ve "parlat" göreli değildir: Home Assistant'ta göreli parlaklık niyeti
+# olmadığı için sabit %30 ve %100 kullanılır (README: Sınırlar).
+language: "tr"
+
+intents:
+  HassLightSet:
+    data:
+      # --- Parlaklık, ada göre ---
+      - sentences:
+          - "<cihaz> [<parlaklik_ad>] <yuzde>{brightness}[<sayi_eki>] <ayarla_fiil>"
+          - "<cihaz> <parlaklik_ad> {brightness}[<sayi_eki>] <ayarla_fiil>"
+          - "<alan> <cihaz> [<parlaklik_ad>] <yuzde>{brightness}[<sayi_eki>] <ayarla_fiil>"
+        requires_context:
+          domain:
+            - "light"
+        response: "parlaklik"
+      - sentences:
+          - "<cihaz> [<parlaklik_ad>] {tr_seviye:brightness} <ayarla_fiil>"
+        requires_context:
+          domain:
+            - "light"
+        response: "seviye"
+      - sentences:
+          - "<cihaz> (kıs|kısar mısın|kısın|azalt|azaltır mısın|loş yap|loşlaştır)"
+        requires_context:
+          domain:
+            - "light"
+        slots:
+          brightness: 30
+        response: "kis"
+      - sentences:
+          - "<cihaz> (parlat|parlatır mısın|artır|artırır mısın|arttır|arttırır mısın)"
+        requires_context:
+          domain:
+            - "light"
+        slots:
+          brightness: 100
+        response: "parlat"
+      # --- Parlaklık, odaya göre ---
+      - sentences:
+          - "<alan> [<isik_ad>] [<parlaklik_ad>] <yuzde>{brightness}[<sayi_eki>] <ayarla_fiil>"
+          - "<alan> [<isik_ad>] <parlaklik_ad> {brightness}[<sayi_eki>] <ayarla_fiil>"
+        slots:
+          domain: "light"
+        response: "parlaklik"
+      - sentences:
+          - "<alan> <isik_ad> {tr_seviye:brightness} <ayarla_fiil>"
+        slots:
+          domain: "light"
+        response: "seviye"
+      - sentences:
+          - "<alan> <isik_ad> (kıs|kısar mısın|kısın|azalt|azaltır mısın|loş yap|loşlaştır)"
+        slots:
+          domain: "light"
+          brightness: 30
+        response: "kis"
+      - sentences:
+          - "<alan> <isik_ad> (parlat|parlatır mısın|artır|artırır mısın|arttır|arttırır mısın)"
+        slots:
+          domain: "light"
+          brightness: 100
+        response: "parlat"
+      # --- Parlaklık, bulunduğun oda ---
+      - sentences:
+          - "<isik_ad> <yuzde>{brightness}[<sayi_eki>] <parlaklik_ad> <ayarla_fiil>"
+          - "[<isik_ad>] [<parlaklik_ad>] <yuzde>{brightness}[<sayi_eki>] <ayarla_fiil>"
+          - "[<isik_ad>] <parlaklik_ad> {brightness}[<sayi_eki>] <ayarla_fiil>"
+        slots:
+          domain: "light"
+        requires_context:
+          area:
+            slot: true
+        response: "parlaklik"
+      - sentences:
+          - "<isik_ad> {tr_seviye:brightness} <ayarla_fiil>"
+        slots:
+          domain: "light"
+        requires_context:
+          area:
+            slot: true
+        response: "seviye"
+      - sentences:
+          - "<isik_ad> (kıs|kısar mısın|kısın|azalt|azaltır mısın|loş yap|loşlaştır)"
+        slots:
+          domain: "light"
+          brightness: 30
+        requires_context:
+          area:
+            slot: true
+        response: "kis"
+      - sentences:
+          - "<isik_ad> (parlat|parlatır mısın|artır|artırır mısın|arttır|arttırır mısın)"
+        slots:
+          domain: "light"
+          brightness: 100
+        requires_context:
+          area:
+            slot: true
+        response: "parlat"
+
+      # --- Renk ---
+      - sentences:
+          - "<cihaz> [rengini] {tr_renk:color} [renk|renge] <ayarla_fiil>"
+          - "<cihaz> {tr_renk:color} (yak|yakar mısın)"
+        requires_context:
+          domain:
+            - "light"
+        response: "renk"
+      - sentences:
+          - "<alan> [<isik_ad>] [rengini] {tr_renk:color} [renk|renge] <ayarla_fiil>"
+          - "<alan> [<isik_ad>] {tr_renk:color} (yak|yakar mısın)"
+        slots:
+          domain: "light"
+        response: "renk"
+      - sentences:
+          - "<isik_ad> [rengini] {tr_renk:color} [renk|renge] <ayarla_fiil>"
+          - "<isik_ad> {tr_renk:color} (yak|yakar mısın)"
+        slots:
+          domain: "light"
+        requires_context:
+          area:
+            slot: true
+        response: "renk"
+
+      # --- Işık tonu ---
+      - sentences:
+          - "<cihaz> {tr_ton:temperature} <ayarla_fiil>"
+        requires_context:
+          domain:
+            - "light"
+        response: "ton"
+      - sentences:
+          - "<alan> [<isik_ad>] {tr_ton:temperature} <ayarla_fiil>"
+        slots:
+          domain: "light"
+        response: "ton"
+      - sentences:
+          - "<isik_ad> {tr_ton:temperature} <ayarla_fiil>"
+        slots:
+          domain: "light"
+        requires_context:
+          area:
+            slot: true
+        response: "ton"
+
+responses:
+  intents:
+    HassLightSet:
+      parlaklik: "Parlaklık yüzde {{ slots.brightness }} yapıldı."
+      seviye: "Parlaklık ayarlandı."
+      kis: "Işık kısıldı."
+      parlat: "Işık en parlak seviyeye alındı."
+      renk: "Renk ayarlandı."
+      ton: "Işık tonu ayarlandı."

@@ -1,0 +1,205 @@
+# Made By FALCREB
+# Ortak kurallar: fiil çekimleri, Türkçe ad ekleri, oda kalıbı, listeler.
+# Diğer dosyalar buradaki <kural> ve {liste} adlarını kullanır.
+# Tüm adlar "home-assistant/intents" içindeki Türkçe adlardan bilerek farklıdır:
+# üst proje kendi kuralını değiştirse bile bu paket çalışmaya devam eder.
+language: "tr"
+
+# Cümledeki bu dolgu sözcükler eşleşmeden önce yok sayılır ("şu lambayı aç").
+skip_words:
+  - "şu"
+  - "hadi"
+  - "haydi"
+  - "bi"
+  - "acaba"
+  - "hemen"
+  - "bana"
+  - "bir"
+  - "biraz"
+  - "tamamen"
+  - "şu an"
+  - "şimdi"
+
+expansion_rules:
+  # --- Fiiller ---------------------------------------------------------------
+  # "aç", "yak", "çalıştır": emir, rica ve soru biçimleri.
+  # Konuşma tanıma "açarmısın" gibi bitişik yazabildiği için o yazım da var.
+  ac_fiil: "(aç|açın|açınız|açsana|açsanıza|açıver|açalım|açar mısın|açar mısınız|açarmısın|açabilir misin|açabilir misiniz|açabilirmisin|yak|yakın|yakınız|yaksana|yaksanıza|yakıver|yakalım|yakar mısın|yakar mısınız|yakarmısın|yakabilir misin|yakabilir misiniz|yakabilirmisin|çalıştır|çalıştırın|çalıştırsana|çalıştırıver|çalıştıralım|çalıştırır mısın|çalıştırır mısınız|çalıştırırmısın|çalıştırabilir misin|çalıştırabilir misiniz|açılsın|yansın|çalışsın)"
+  kapat_fiil: "(kapat|kapa|kapatın|kapayın|kapatınız|kapatsana|kapasana|kapatsanıza|kapatıver|kapayıver|kapatalım|kapatır mısın|kapatır mısınız|kapatırmısın|kapar mısın|kaparmısın|kapatabilir misin|kapatabilir misiniz|kapatabilirmisin|söndür|söndürün|söndürünüz|söndürsene|söndürsenize|söndürüver|söndürelim|söndürür müsün|söndürür müsünüz|söndürürmüsün|söndürebilir misin|söndürebilir misiniz|söndürebilirmisin|kapansın|kapatılsın|sönsün|söndürülsün|yanmasın|açık kalmasın|kalmasın)"
+  # Kapak (perde, panjur) için "aç": yakmak burada anlamsız olduğundan ayrıdır.
+  kapak_ac_fiil: "(aç|açın|açınız|açsana|açıver|açalım|açar mısın|açar mısınız|açarmısın|açabilir misin|açabilir misiniz|kaldır|kaldırın|kaldırsana|kaldırır mısın|yukarı çek|yukarı al|açılsın|kalksın)"
+  kapak_kapat_fiil: "(kapat|kapa|kapatın|kapayın|kapatsana|kapatıver|kapatalım|kapatır mısın|kapatır mısınız|kapatırmısın|kapatabilir misin|kapatabilir misiniz|indir|indirin|indirsene|indirir misin|aşağı indir|aşağı al|çek|çeker misin|kapansın|kapatılsın|insin)"
+  # Değer verme fiilleri: "%50 yap", "22 dereceye ayarla".
+  ayarla_fiil: "(yap|yapın|yapsana|yapıver|yapar mısın|yapar mısınız|yaparmısın|yapabilir misin|yapabilir misiniz|ayarla|ayarlayın|ayarlasana|ayarlar mısın|ayarlar mısınız|ayarlarmısın|ayarlayabilir misin|ayarlayabilir misiniz|getir|getirin|getirir misin|getirsene|al|alın|alır mısın|çevir|çevirin|çevirir misin)"
+  baslat_fiil: "(başlat|başlatın|başlatsana|başlatır mısın|başlatır mısınız|başlatabilir misin|çalıştır|çalıştırın|çalıştırsana|çalıştırır mısın|çalıştırabilir misin)"
+  durdur_fiil: "(durdur|durdurun|durdursana|durdurur musun|durdurur musunuz|durdurabilir misin|duraklat|duraklatın|duraklatır mısın|duraklatabilir misin|dur|dursun)"
+
+  # --- Ekler -----------------------------------------------------------------
+  # Sona eklenen hâl ekleri: lamba-yı, salon-un, salon-da, mutfak-taki, oda-nın...
+  # Liste açıkça yazıldı: üretici bir kural yerine okunup düzeltilebilsin diye.
+  ek: "(ı|i|u|ü|yı|yi|yu|yü|nı|ni|nu|nü|ın|in|un|ün|nın|nin|nun|nün|a|e|ya|ye|na|ne|da|de|ta|te|nda|nde|daki|deki|taki|teki|ndaki|ndeki|dan|den|tan|ten|ndan|nden|ki|lar|ler|ları|leri|ların|lerin|larını|lerini|lara|lere|larda|lerde|lardaki|lerdeki)"
+  # İyelik: "salonun lamba-sını", "odanın fan-ını", "evin perde-sini".
+  iyelik: "(sı|si|su|sü|sını|sini|sunu|sünü|sının|sinin|sunun|sünün|sına|sine|suna|süne|sında|sinde|ını|ini|unu|ünü|ının|inin|unun|ünün|ına|ine|una|üne|ında|inde|unda|ünde)"
+  # Sayıya gelen ek: "50'ye", "50 ye", "30'a", "%20'ye", "40'a".
+  sayi_eki: "['](a|e|ya|ye|na|ne|ta|te|da|de|sine|sına|ine|ına|una|üne)"
+  # "yüzde 50" veya "%50"
+  yuzde: "(yüzde |%)"
+  derece: "derece[(ye|de|yi)]"
+
+  # --- Oda ve ad kalıpları ---------------------------------------------------
+  # Oda adı ve hâl eki: "salon", "salonun", "salondaki", "yatak odasında".
+  # Ünsüz yumuşaması ek kuralıyla üretilemez, o yüzden ikinci seçenek listedir:
+  # "mutfağa", "mutfağın" -> Mutfak.
+  alan: "({area}[<ek>]|{tr_yumusak_alan:area})"
+  kat: "{floor}[<ek>]"
+  # Cihaz adı ve eki: "avize", "avizeyi", "avizesini", "salon lambasını".
+  cihaz: "{name}[(<ek>|<iyelik>)]"
+
+  # --- Sözcük grupları -------------------------------------------------------
+  # Cümle başındaki büyük I harfi eşleşmede "i" olur ("Işık" -> "işık"); konuşma
+  # tanıma genelde cümleye büyük harfle başladığı için iki yazım da kabul edilir.
+  # Büyük İ de küçük i ile aynı sayılmaz; "i" ile başlayan sözcüklere "İ" eklenir.
+  isik_tekil: "((ı|i)şık|(ı|i)şığı|(ı|i)şığını|lamba|lambayı|lambası|lambasını|aydınlatma|aydınlatmayı|aydınlatmasını)"
+  isik_cogul: "((ı|i)şıklar|(ı|i)şıkları|(ı|i)şıklarını|lambalar|lambaları|lambalarını)"
+  isik_ad: "(<isik_tekil>|<isik_cogul>)"
+  tum: "(bütün|tüm|hep)"
+  fan_ad: "(fan|fanı|fanını|fanlar|fanları|fanlarını|vantilatör|vantilatörü|vantilatörünü|vantilatörleri|vantilatörlerini|pervane|pervaneyi|pervanesini)"
+  priz_ad: "(priz|prizi|prizini|prizler|prizleri|prizlerini|anahtar|anahtarı|anahtarını)"
+  klima_ad: "(klima|klimayı|kliması|klimasını|kombi|kombiyi|kombisi|kombisini|termostat|termostatı|termostatını|(ı|i)sıtıcı|(ı|i)sıtıcıyı|(ı|i)sıtıcısını|peteği|petekleri)"
+  sicaklik_ad: "(sıcaklık|sıcaklığı|sıcaklığını|(ı|i)sı|(ı|i)sıyı|(ı|i)sısı|(ı|i)sısını)"
+  parlaklik_ad: "(parlaklık|parlaklığı|parlaklığını|parlaklığa|aydınlık|aydınlığı|aydınlığını|ışık seviyesi|ışık seviyesini)"
+  ev_ad: "(ev|evi|evin|evde|evdeki|bütün evdeki|tüm evdeki|bütün evin|tüm evin|her yerde|her yerdeki)"
+
+lists:
+  # Odanın sözlükte yumuşayan biçimleri. "out", Home Assistant'taki oda adıdır.
+  # Sizin evde ad farklıysa burayı değiştirin (rehber: docs/REHBER.md).
+  tr_yumusak_alan:
+    values:
+      - in: "mutfağ(ı|a|ın)"
+        out: "Mutfak"
+  # Aç/kapalı sorgusu
+  tr_acik_kapali:
+    values:
+      - in: "(açık|yanıyor|yanık|yanıyorlar|çalışıyor)"
+        out: "on"
+      - in: "(kapalı|sönük|söndü|söndürüldü|kapandı)"
+        out: "off"
+  # Pencere/kapı sensörü: kapanma durumu
+  tr_sensor_acik:
+    values:
+      - in: "açık"
+        out: "on"
+      - in: "kapalı"
+        out: "off"
+  tr_kapak_durum:
+    values:
+      - in: "açık"
+        out: "open"
+      - in: "kapalı"
+        out: "closed"
+  tr_kilit_durum:
+    values:
+      - in: "kilitli"
+        out: "locked"
+      - in: "(kilitli değil|açık)"
+        out: "unlocked"
+  # Kapak türleri. Garaj kapısı bilerek yok: bu paket onu açan yeni cümle eklemez.
+  tr_kapak:
+    values:
+      - in: "perde[(yi|ler|leri|lerini|si|sini|nin)]"
+        out: "curtain"
+      - in: "jaluzi[(yi|ler|leri|lerini|si|sini)]"
+        out: "blind"
+      - in: "panjur[(u|unu|lar|ları|larını)]"
+        out: "shutter"
+      - in: "(stor|güneşlik)[(u|ü|unu|ünü|lar|ler|ları|leri)]"
+        out: "shade"
+      - in: "tente[(yi|ler|leri|sini)]"
+        out: "awning"
+  # Renkler: Home Assistant İngilizce renk adı bekler, "out" bunu verir.
+  tr_renk:
+    values:
+      - in: "kırmızı[ya]"
+        out: "red"
+      - in: "mavi[ye]"
+        out: "blue"
+      - in: "yeşil[e]"
+        out: "green"
+      - in: "sarı[ya]"
+        out: "yellow"
+      - in: "turuncu[ya]"
+        out: "orange"
+      - in: "mor[a]"
+        out: "purple"
+      - in: "pembe[ye]"
+        out: "pink"
+      - in: "beyaz[a]"
+        out: "white"
+      - in: "lacivert[e]"
+        out: "navy"
+      - in: "turkuaz[a]"
+        out: "turquoise"
+  # Işık tonu (Kelvin).
+  tr_ton:
+    values:
+      - in: "sıcak beyaz[a]"
+        out: 2700
+      - in: "doğal beyaz[a]"
+        out: 4000
+      - in: "gün ışığı[na]"
+        out: 5000
+      - in: "soğuk beyaz[a]"
+        out: 6500
+  # Sözle söylenen seviyeler.
+  tr_seviye:
+    values:
+      - in: "(en yüksek|en yükseğe|tam|sonuna kadar|maksimum[a]|son seviye[ye])"
+        out: 100
+      - in: "(yarı|yarıya|yarım|orta|ortaya)"
+        out: 50
+      - in: "(en düşük|en düşüğe|en az|en aza|minimum[a])"
+        out: 5
+  # Yarım derece: Türkçede "22 buçuk" denir, sayı listesi bunu tanımaz.
+  tr_bucuklu:
+    values:
+      - in: "16 buçuk"
+        out: 16.5
+      - in: "17 buçuk"
+        out: 17.5
+      - in: "18 buçuk"
+        out: 18.5
+      - in: "19 buçuk"
+        out: 19.5
+      - in: "20 buçuk"
+        out: 20.5
+      - in: "21 buçuk"
+        out: 21.5
+      - in: "22 buçuk"
+        out: 22.5
+      - in: "23 buçuk"
+        out: 23.5
+      - in: "24 buçuk"
+        out: 24.5
+      - in: "25 buçuk"
+        out: 25.5
+      - in: "26 buçuk"
+        out: 26.5
+      - in: "27 buçuk"
+        out: 27.5
+      - in: "28 buçuk"
+        out: 28.5
+      - in: "29 buçuk"
+        out: 29.5
+      - in: "30 buçuk"
+        out: 30.5
+  # Klima fan modları
+  tr_fan_modu:
+    values:
+      - in: "otomatik[e]"
+        out: "auto"
+      - in: "(düşük|düşüğe|yavaş|yavaşa)"
+        out: "low"
+      - in: "(orta|ortaya)"
+        out: "medium"
+      - in: "(yüksek|yükseğe|hızlı|hızlıya)"
+        out: "high"

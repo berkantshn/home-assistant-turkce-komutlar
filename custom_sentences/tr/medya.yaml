@@ -1,0 +1,199 @@
+# Made By FALCREB
+# Müzik ve ses (HassMedia*, HassSetVolume*). Üst projede Türkçe cümle yoktur.
+# Müzik arama ve çalma (HassMediaSearchAndPlay) bilerek yok: müzik kaynağına bağlı.
+language: "tr"
+
+expansion_rules:
+  # Medya sözcükleri
+  medya_ad: "(oynatmaya|müzik|müziği|müziğe|şarkı|şarkıyı|şarkıya|film|filmi|filme|video|videoyu|videoya|medya|medyayı|medyaya|dizi|diziyi|diziye)"
+  ses_ad: "(ses|sesi|sesini|sesin)"
+  sonraki_ad: "(sonraki|bir sonraki|sıradaki|ileri|İleri)"
+  onceki_ad: "(önceki|bir önceki|geri)"
+  sarki_ad: "(şarkı|şarkıya|şarkıyı|parça|parçaya|parçayı|müzik|müziğe|bölüm|bölüme|bölümü)"
+
+intents:
+  HassMediaPause:
+    data:
+      - sentences:
+          - "<alan> [<medya_ad>] <durdur_fiil>"
+        response: "default"
+      - sentences:
+          - "[<medya_ad>] <durdur_fiil>"
+        requires_context:
+          area:
+            slot: true
+        response: "default"
+      - sentences:
+          - "<cihaz> <durdur_fiil>"
+        requires_context:
+          domain:
+            - "media_player"
+        response: "default"
+
+  HassMediaUnpause:
+    data:
+      - sentences:
+          - "<alan> [<medya_ad>] (devam et|devam ettir|sürdür|kaldığı yerden devam et|tekrar başlat)"
+        response: "default"
+      - sentences:
+          - "[<medya_ad>] (devam et|devam ettir|sürdür|kaldığı yerden devam et|tekrar başlat)"
+        requires_context:
+          area:
+            slot: true
+        response: "default"
+      - sentences:
+          - "<cihaz> (devam et|devam ettir|sürdür|tekrar başlat|yeniden başlat)"
+        requires_context:
+          domain:
+            - "media_player"
+        response: "default"
+
+  HassMediaNext:
+    data:
+      - sentences:
+          - "<alan> <sonraki_ad> [<sarki_ad>] [(geç|geçer misin|aç|açar mısın)]"
+        response: "default"
+      - sentences:
+          - "<sonraki_ad> [<sarki_ad>] [(geç|geçer misin|aç|açar mısın|çal|çalar mısın)]"
+          - "(şarkıyı|parçayı|bu şarkıyı|bunu) (geç|atla|değiştir)"
+        requires_context:
+          area:
+            slot: true
+        response: "default"
+      - sentences:
+          - "<cihaz> <sonraki_ad> [<sarki_ad>] [(geç|geçer misin|aç|açar mısın|çal|çalar mısın)]"
+        requires_context:
+          domain:
+            - "media_player"
+        response: "default"
+
+  HassMediaPrevious:
+    data:
+      - sentences:
+          - "<alan> <onceki_ad> [<sarki_ad>] [(geç|geçer misin|dön|döner misin|aç|açar mısın)]"
+        response: "default"
+      - sentences:
+          - "<onceki_ad> [<sarki_ad>] [(geç|geçer misin|dön|döner misin|aç|açar mısın)]"
+        requires_context:
+          area:
+            slot: true
+        response: "default"
+      - sentences:
+          - "<cihaz> <onceki_ad> [<sarki_ad>] [(geç|geçer misin|dön|döner misin|aç|açar mısın)]"
+        requires_context:
+          domain:
+            - "media_player"
+        response: "default"
+
+  HassSetVolume:
+    data:
+      # "televizyonun sesini 20 yap"
+      - sentences:
+          - "<cihaz> <ses_ad> [<yuzde>]{volume:volume_level}[<sayi_eki>] <ayarla_fiil>"
+        requires_context:
+          domain:
+            - "media_player"
+        response: "default"
+      - sentences:
+          - "<alan> <ses_ad> [<yuzde>]{volume:volume_level}[<sayi_eki>] <ayarla_fiil>"
+        response: "default"
+      - sentences:
+          - "<ses_ad> [<yuzde>]{volume:volume_level}[<sayi_eki>] <ayarla_fiil>"
+        requires_context:
+          area:
+            slot: true
+        response: "default"
+
+  HassSetVolumeRelative:
+    data:
+      - sentences:
+          - "<cihaz> <ses_ad> (kıs|kısar mısın|kısın|azalt|azaltır mısın|düşür|düşürür müsün)"
+        requires_context:
+          domain:
+            - "media_player"
+        slots:
+          volume_step: "down"
+        response: "default"
+      - sentences:
+          - "<cihaz> <ses_ad> (aç|açar mısın|artır|artırır mısın|arttır|arttırır mısın|yükselt|yükseltir misin)"
+        requires_context:
+          domain:
+            - "media_player"
+        slots:
+          volume_step: "up"
+        response: "default"
+      - sentences:
+          - "<alan> <ses_ad> (kıs|kısar mısın|kısın|azalt|azaltır mısın|düşür|düşürür müsün)"
+        slots:
+          volume_step: "down"
+        response: "default"
+      - sentences:
+          - "<alan> <ses_ad> (aç|açar mısın|artır|artırır mısın|arttır|arttırır mısın|yükselt|yükseltir misin)"
+        slots:
+          volume_step: "up"
+        response: "default"
+      - sentences:
+          - "<ses_ad> (kıs|kısar mısın|kısın|azalt|azaltır mısın|düşür|düşürür müsün)"
+        requires_context:
+          area:
+            slot: true
+        slots:
+          volume_step: "down"
+        response: "default"
+      - sentences:
+          - "<ses_ad> (aç|açar mısın|artır|artırır mısın|arttır|arttırır mısın|yükselt|yükseltir misin)"
+        requires_context:
+          area:
+            slot: true
+        slots:
+          volume_step: "up"
+        response: "default"
+
+  HassMediaPlayerMute:
+    data:
+      - sentences:
+          - "(sessize al|sesi kapat|sesi kes|sustur)"
+        requires_context:
+          area:
+            slot: true
+        response: "default"
+      - sentences:
+          - "<cihaz> (sessize al|sesini kapat|sesini kes|sustur)"
+        requires_context:
+          domain:
+            - "media_player"
+        response: "default"
+
+  HassMediaPlayerUnmute:
+    data:
+      - sentences:
+          - "(sessizden çıkar|sesi geri aç|sesi tekrar aç)"
+        requires_context:
+          area:
+            slot: true
+        response: "default"
+      - sentences:
+          - "<cihaz> (sessizden çıkar|sesini geri aç|sesini tekrar aç)"
+        requires_context:
+          domain:
+            - "media_player"
+        response: "default"
+
+responses:
+  intents:
+    HassMediaPause:
+      default: "Duraklatıldı."
+    HassMediaUnpause:
+      default: "Devam ediyor."
+    HassMediaNext:
+      default: "Sonrakine geçildi."
+    HassMediaPrevious:
+      default: "Öncekine dönüldü."
+    HassSetVolume:
+      default: "Ses ayarlandı."
+    HassSetVolumeRelative:
+      default: "Ses ayarlandı."
+    HassMediaPlayerMute:
+      default: "Ses kapatıldı."
+    HassMediaPlayerUnmute:
+      default: "Ses açıldı."

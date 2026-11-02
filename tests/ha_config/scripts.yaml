@@ -1,0 +1,8 @@
+# Made By FALCREB
+# Sahte komut dosyası: sadece bir sahte lambayı kapatır.
+gece_modu:
+  alias: Gece Düzeni
+  sequence:
+    - action: light.turn_off
+      target:
+        entity_id: light.salon_lambasi

@@ -1,0 +1,310 @@
+# Made By FALCREB
+# Açma-kapatma cümleleri (HassTurnOn, HassTurnOff).
+# Üst projede yalnızca çoğul ve yalın emir var ("mutfaktaki ışıkları aç").
+# Burası tekil ("salonun ışığını aç"), rica ("açar mısın"), fiille başlayan
+# ("aç salonun ışığını"), kat ve tüm ev biçimlerini ekler.
+#
+# GÜVENLİK: {name} içeren her blok "requires_context.domain" ile sınırlıdır.
+# lock, valve, alarm_control_panel ve cover buraya bilerek yazılmadı.
+language: "tr"
+
+intents:
+  HassTurnOn:
+    data:
+      # --- Odaya göre ışık ---
+      - sentences:
+          - "<alan> [<tum>] <isik_ad> <ac_fiil>"
+          - "<ac_fiil> <alan> [<tum>] <isik_ad>"
+        slots:
+          domain: "light"
+        response: "isik_alan"
+      # --- Bulunduğun oda (uydu cihazının odası) ---
+      - sentences:
+          - "[<tum>] [(burada|buradaki|burdaki)] <isik_ad> <ac_fiil>"
+          - "<ac_fiil> [<tum>] [(buradaki|burdaki)] <isik_ad>"
+        slots:
+          domain: "light"
+        requires_context:
+          area:
+            slot: true
+        response: "isik_burada"
+      # --- Kat ---
+      - sentences:
+          - "<kat> [<tum>] <isik_ad> <ac_fiil>"
+        slots:
+          domain: "light"
+        response: "isik_kat"
+      # --- Tüm ev ---
+      - sentences:
+          - "<ev_ad> [<tum>] <isik_ad> <ac_fiil>"
+          - "<tum> <isik_cogul> <ac_fiil>"
+          - "<isik_cogul> hepsini <ac_fiil>"
+        slots:
+          domain: "light"
+        response: "isik_tum"
+      # --- Odaya göre fan ---
+      - sentences:
+          - "<alan> [<tum>] <fan_ad> <ac_fiil>"
+        slots:
+          domain: "fan"
+        response: "fan_alan"
+      # --- Odaya göre priz ---
+      - sentences:
+          - "<alan> [<tum>] <priz_ad> <ac_fiil>"
+        slots:
+          domain: "switch"
+        response: "priz_alan"
+      # --- Odaya göre klima/kombi ---
+      - sentences:
+          - "<alan> <klima_ad> <ac_fiil>"
+        slots:
+          domain: "climate"
+        response: "klima_alan"
+      # --- Bulunduğun odada fan, priz, klima ---
+      - sentences:
+          - "<fan_ad> <ac_fiil>"
+        slots:
+          domain: "fan"
+        requires_context:
+          area:
+            slot: true
+        response: "fan_burada"
+      - sentences:
+          - "<priz_ad> <ac_fiil>"
+        slots:
+          domain: "switch"
+        requires_context:
+          area:
+            slot: true
+        response: "priz_burada"
+      - sentences:
+          - "<klima_ad> <ac_fiil>"
+        slots:
+          domain: "climate"
+        requires_context:
+          area:
+            slot: true
+        response: "klima_burada"
+      # --- Odaya göre perde/panjur ---
+      - sentences:
+          - "<alan> [<tum>] {tr_kapak:device_class} <kapak_ac_fiil>"
+          - "<kapak_ac_fiil> <alan> [<tum>] {tr_kapak:device_class}"
+        slots:
+          domain: "cover"
+        response: "kapak"
+      - sentences:
+          - "[<tum>] [(buradaki|burdaki)] {tr_kapak:device_class} <kapak_ac_fiil>"
+        slots:
+          domain: "cover"
+        requires_context:
+          area:
+            slot: true
+        response: "kapak"
+      # --- Ada göre: güvenli alanlar ---
+      - sentences:
+          - "<cihaz> <ac_fiil>"
+          - "<ac_fiil> <cihaz>"
+          - "<alan> <cihaz> <ac_fiil>"
+        requires_context:
+          domain:
+            - "light"
+            - "switch"
+            - "fan"
+            - "media_player"
+            - "input_boolean"
+            - "climate"
+        response: "cihaz"
+      # "Abajurun ışığını aç"
+      - sentences:
+          - "<cihaz> <isik_tekil> <ac_fiil>"
+        requires_context:
+          domain:
+            - "light"
+        response: "cihaz"
+      # --- Ada göre: perde, panjur ---
+      - sentences:
+          - "<cihaz> <kapak_ac_fiil>"
+          - "<alan> <cihaz> <kapak_ac_fiil>"
+        requires_context:
+          domain:
+            - "cover"
+        excludes_context:
+          device_class:
+            - "garage"
+            - "door"
+            - "gate"
+        response: "cihaz"
+      # --- Sahne (üst projede Türkçe sahne cümlesi yok) ---
+      - sentences:
+          - "{name}[<ek>] (<ac_fiil>|<baslat_fiil>|etkinleştir|etkinleştirir misin)"
+          - "{name}[<ek>] (sahnesi|sahnesini|modu|modunu) (<ac_fiil>|<baslat_fiil>|etkinleştir|etkinleştirir misin)"
+        requires_context:
+          domain:
+            - "scene"
+        response: "sahne"
+      # --- Komut dosyası (script) ---
+      - sentences:
+          - "{name}[<ek>] (<baslat_fiil>|<ac_fiil>)"
+        requires_context:
+          domain:
+            - "script"
+        response: "betik"
+
+  HassTurnOff:
+    data:
+      - sentences:
+          - "<alan> [<tum>] <isik_ad> <kapat_fiil>"
+          - "<kapat_fiil> <alan> [<tum>] <isik_ad>"
+        slots:
+          domain: "light"
+        response: "isik_alan"
+      - sentences:
+          - "[<tum>] [(burada|buradaki|burdaki)] <isik_ad> <kapat_fiil>"
+          - "<kapat_fiil> [<tum>] [(buradaki|burdaki)] <isik_ad>"
+        slots:
+          domain: "light"
+        requires_context:
+          area:
+            slot: true
+        response: "isik_burada"
+      - sentences:
+          - "<kat> [<tum>] <isik_ad> <kapat_fiil>"
+        slots:
+          domain: "light"
+        response: "isik_kat"
+      - sentences:
+          - "<ev_ad> [<tum>] <isik_ad> <kapat_fiil>"
+          - "<tum> <isik_cogul> <kapat_fiil>"
+          - "<isik_cogul> hepsini <kapat_fiil>"
+        slots:
+          domain: "light"
+        response: "isik_tum"
+      - sentences:
+          - "<alan> [<tum>] <fan_ad> <kapat_fiil>"
+        slots:
+          domain: "fan"
+        response: "fan_alan"
+      - sentences:
+          - "<alan> [<tum>] <priz_ad> <kapat_fiil>"
+        slots:
+          domain: "switch"
+        response: "priz_alan"
+      - sentences:
+          - "<alan> <klima_ad> <kapat_fiil>"
+        slots:
+          domain: "climate"
+        response: "klima_alan"
+      - sentences:
+          - "<fan_ad> <kapat_fiil>"
+        slots:
+          domain: "fan"
+        requires_context:
+          area:
+            slot: true
+        response: "fan_burada"
+      - sentences:
+          - "<priz_ad> <kapat_fiil>"
+        slots:
+          domain: "switch"
+        requires_context:
+          area:
+            slot: true
+        response: "priz_burada"
+      - sentences:
+          - "<klima_ad> <kapat_fiil>"
+        slots:
+          domain: "climate"
+        requires_context:
+          area:
+            slot: true
+        response: "klima_burada"
+      - sentences:
+          - "<alan> [<tum>] {tr_kapak:device_class} <kapak_kapat_fiil>"
+          - "<kapak_kapat_fiil> <alan> [<tum>] {tr_kapak:device_class}"
+        slots:
+          domain: "cover"
+        response: "kapak"
+      - sentences:
+          - "[<tum>] [(buradaki|burdaki)] {tr_kapak:device_class} <kapak_kapat_fiil>"
+        slots:
+          domain: "cover"
+        requires_context:
+          area:
+            slot: true
+        response: "kapak"
+      # "Fanı durdur" doğal bir kapatma cümlesidir.
+      - sentences:
+          - "<cihaz> (durdur|durdurur musun|durdursana)"
+        requires_context:
+          domain:
+            - "fan"
+        response: "cihaz"
+      - sentences:
+          - "<alan> <fan_ad> (durdur|durdurur musun|durdursana)"
+        slots:
+          domain: "fan"
+        response: "fan_alan"
+      # "Abajurun ışığını söndür"
+      - sentences:
+          - "<cihaz> <isik_tekil> <kapat_fiil>"
+        requires_context:
+          domain:
+            - "light"
+        response: "cihaz"
+      # Kilit burada yok: kilitte "kapat" kilidi AÇAR (HassTurnOff = unlock).
+      - sentences:
+          - "<cihaz> <kapat_fiil>"
+          - "<kapat_fiil> <cihaz>"
+          - "<alan> <cihaz> <kapat_fiil>"
+        requires_context:
+          domain:
+            - "light"
+            - "switch"
+            - "fan"
+            - "media_player"
+            - "input_boolean"
+            - "climate"
+        response: "cihaz"
+      - sentences:
+          - "<cihaz> <kapak_kapat_fiil>"
+          - "<alan> <cihaz> <kapak_kapat_fiil>"
+        requires_context:
+          domain:
+            - "cover"
+        excludes_context:
+          device_class:
+            - "garage"
+            - "door"
+            - "gate"
+        response: "cihaz"
+
+responses:
+  intents:
+    HassTurnOn:
+      isik_alan: "{{ slots.area }} ışıkları açıldı."
+      isik_burada: "Işıklar açıldı."
+      isik_kat: "{{ slots.floor }} ışıkları açıldı."
+      isik_tum: "Bütün ışıklar açıldı."
+      fan_alan: "{{ slots.area }} fanı açıldı."
+      priz_alan: "{{ slots.area }} prizleri açıldı."
+      klima_alan: "{{ slots.area }} kliması açıldı."
+      fan_burada: "Fan açıldı."
+      priz_burada: "Priz açıldı."
+      klima_burada: "Klima açıldı."
+      kapak: "Açıldı."
+      cihaz: "{{ slots.name }} açıldı."
+      sahne: "{{ slots.name }} etkinleştirildi."
+      betik: "{{ slots.name }} çalıştırıldı."
+    HassTurnOff:
+      isik_alan: "{{ slots.area }} ışıkları kapatıldı."
+      isik_burada: "Işıklar kapatıldı."
+      isik_kat: "{{ slots.floor }} ışıkları kapatıldı."
+      isik_tum: "Bütün ışıklar kapatıldı."
+      fan_alan: "{{ slots.area }} fanı kapatıldı."
+      priz_alan: "{{ slots.area }} prizleri kapatıldı."
+      klima_alan: "{{ slots.area }} kliması kapatıldı."
+      fan_burada: "Fan kapatıldı."
+      priz_burada: "Priz kapatıldı."
+      klima_burada: "Klima kapatıldı."
+      kapak: "Kapatıldı."
+      cihaz: "{{ slots.name }} kapatıldı."

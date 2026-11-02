@@ -1,0 +1,221 @@
+# Made By FALCREB
+# Test matrisi. Her satır bir cümle, beklenen niyet (intent), beklenen slotlar ve
+# sonuçta sahte cihazda görülmesi gereken durum. intent: null = eşleşmemeli.
+# device: true = konuşma, Salon'daki sahte uydu cihazından geliyormuş gibi.
+cases:
+  # --- A. Tekil ve iyelikli ışık: Türkçe ek işleme ---
+  - {group: isik-oda, text: "salonun ışığını aç", intent: HassTurnOn, slots: {area: Salon, domain: light}, setup: {light.salon_lambasi: {state: "off"}}, expect: {light.salon_lambasi: {state: "on"}}}
+  - {group: isik-oda, text: "salondaki lambayı yak", intent: HassTurnOn, slots: {area: Salon, domain: light}, setup: {light.salon_lambasi: {state: "off"}}, expect: {light.salon_lambasi: {state: "on"}}}
+  - {group: isik-oda, text: "salonun lambasını kapat", intent: HassTurnOff, slots: {area: Salon}, setup: {light.salon_lambasi: {state: "on"}}, expect: {light.salon_lambasi: {state: "off"}}}
+  - {group: isik-oda, text: "mutfağın ışığını söndür", intent: HassTurnOff, slots: {area: Mutfak, domain: light}, setup: {light.mutfak_lambasi: {state: "on"}}, expect: {light.mutfak_lambasi: {state: "off"}}}
+  - {group: isik-oda, text: "mutfaktaki ışığı aç", intent: HassTurnOn, slots: {area: Mutfak, domain: light}, setup: {light.mutfak_lambasi: {state: "off"}}, expect: {light.mutfak_lambasi: {state: "on"}}}
+  - {group: isik-oda, text: "yatak odasının ışığını aç", intent: HassTurnOn, slots: {area: Yatak Odası}, setup: {light.abajur: {state: "off"}}, expect: {light.abajur: {state: "on"}}}
+  - {group: isik-oda, text: "yatak odasındaki lambayı kapat", intent: HassTurnOff, slots: {area: Yatak Odası}, setup: {light.abajur: {state: "on"}}, expect: {light.abajur: {state: "off"}}}
+  - {group: isik-oda, text: "salon ışığını aç", intent: HassTurnOn, slots: {area: Salon}, setup: {light.salon_lambasi: {state: "off"}}, expect: {light.salon_lambasi: {state: "on"}}}
+  - {group: isik-oda, text: "aç salonun ışığını", intent: HassTurnOn, slots: {area: Salon}, setup: {light.salon_lambasi: {state: "off"}}, expect: {light.salon_lambasi: {state: "on"}}}
+
+  # --- B. Rica ve konuşma biçimleri ---
+  - {group: rica, text: "salonun ışığını açar mısın", intent: HassTurnOn, slots: {area: Salon}, setup: {light.salon_lambasi: {state: "off"}}, expect: {light.salon_lambasi: {state: "on"}}}
+  - {group: rica, text: "mutfağın ışığını kapatır mısın lütfen", intent: HassTurnOff, slots: {area: Mutfak}, setup: {light.mutfak_lambasi: {state: "on"}}, expect: {light.mutfak_lambasi: {state: "off"}}}
+  - {group: rica, text: "salondaki lambaları kapatsana", intent: HassTurnOff, slots: {area: Salon}, setup: {light.salon_lambasi: {state: "on"}}, expect: {light.salon_lambasi: {state: "off"}}}
+  - {group: rica, text: "yatak odasının ışığını söndürür müsün", intent: HassTurnOff, slots: {area: Yatak Odası}, setup: {light.abajur: {state: "on"}}, expect: {light.abajur: {state: "off"}}}
+  - {group: rica, text: "avizeyi yakabilir misin", intent: HassTurnOn, slots: {name: Avize}, setup: {light.avize: {state: "off"}}, expect: {light.avize: {state: "on"}}}
+  - {group: rica, text: "abajuru kapatabilir misiniz", intent: HassTurnOff, slots: {name: Abajur}, setup: {light.abajur: {state: "on"}}, expect: {light.abajur: {state: "off"}}}
+  - {group: rica, text: "hadi şu avizeyi söndür", intent: HassTurnOff, slots: {name: Avize}, setup: {light.avize: {state: "on"}}, expect: {light.avize: {state: "off"}}}
+  - {group: rica, text: "kahve makinesini çalıştırır mısın", intent: HassTurnOn, slots: {name: Kahve Makinesi}, setup: {switch.kahve_makinesi: {state: "off"}}, expect: {switch.kahve_makinesi: {state: "on"}}}
+  - {group: rica, text: "avize yansın", intent: HassTurnOn, slots: {name: Avize}, setup: {light.avize: {state: "off"}}, expect: {light.avize: {state: "on"}}}
+  - {group: rica, text: "yatak odasında ışık kalmasın", intent: HassTurnOff, slots: {area: Yatak Odası}, setup: {light.abajur: {state: "on"}}, expect: {light.abajur: {state: "off"}}}
+  - {group: rica, text: "Avizeyi açar mısın?", intent: HassTurnOn, slots: {name: Avize}, setup: {light.avize: {state: "off"}}, expect: {light.avize: {state: "on"}}}
+
+  # --- C. Ada göre iyelik: "salonun avizesini" ---
+  - {group: iyelik, text: "salonun avizesini aç", intent: HassTurnOn, slots: {area: Salon, name: Avize}, setup: {light.avize: {state: "off"}}, expect: {light.avize: {state: "on"}}}
+  - {group: iyelik, text: "yatak odasının abajurunu kapat", intent: HassTurnOff, slots: {area: Yatak Odası, name: Abajur}, setup: {light.abajur: {state: "on"}}, expect: {light.abajur: {state: "off"}}}
+  - {group: iyelik, text: "yatak odasındaki tavan fanını aç", intent: HassTurnOn, slots: {name: Tavan Fanı}, setup: {fan.tavan_fani: {state: "off"}}, expect: {fan.tavan_fani: {state: "on"}}}
+  - {group: iyelik, text: "salonun prizini kapat", intent: HassTurnOff, slots: {area: Salon}, setup: {switch.priz: {state: "on"}}, expect: {switch.priz: {state: "off"}}}
+
+  # --- D. Büyük I sorunu: konuşma tanıma cümleye büyük harfle başlar ---
+  - {group: buyuk-i, text: "Işıkları kapat", intent: HassTurnOff, device: true, slots: {domain: light}, setup: {light.salon_lambasi: {state: "on"}}, expect: {light.salon_lambasi: {state: "off"}}}
+  - {group: buyuk-i, text: "Işığı aç", intent: HassTurnOn, device: true, slots: {domain: light}, setup: {light.salon_lambasi: {state: "off"}}, expect: {light.salon_lambasi: {state: "on"}}}
+  - {group: buyuk-i, text: "tavan ışığını aç", intent: HassTurnOn, note: "küçük harfli takma adla çalışır", setup: {light.tavan_isigi: {state: "off"}}, expect: {light.tavan_isigi: {state: "on"}}}
+  - {group: buyuk-i, text: "ara ışığını aç", intent: null, note: "BİLİNEN SINIR: ad büyük I ile yazılmış, takma ad yok", setup: {light.ara_isigi: {state: "off"}}, expect: {light.ara_isigi: {state: "off"}}}
+  - {group: buyuk-i, text: "Ara Işığını aç", intent: HassTurnOn, note: "metin de büyük I ile gelirse eşleşir", setup: {light.ara_isigi: {state: "off"}}, expect: {light.ara_isigi: {state: "on"}}}
+
+  - {group: buyuk-i, text: "ikinci lambayı aç", intent: HassTurnOn, note: "büyük İ ile yazılmış ad, küçük i ile eşleşir", setup: {light.ikinci_lamba: {state: "off"}}, expect: {light.ikinci_lamba: {state: "on"}}}
+  - {group: buyuk-i, text: "Salonun ışığını aç.", intent: HassTurnOn, slots: {area: Salon}, setup: {light.salon_lambasi: {state: "off"}}, expect: {light.salon_lambasi: {state: "on"}}}
+  - {group: buyuk-i, text: "Isıyı 21 yap", intent: HassClimateSetTemperature, device: true, slots: {temperature: 21}, expect: {climate.salon_klimasi: {attrs: {temperature: 21}}}}
+  - {group: buyuk-i, text: "İptal et", intent: HassNevermind}
+  - {group: buyuk-i, text: "Lütfen mutfağın ışığını aç.", intent: HassTurnOn, slots: {area: Mutfak}, setup: {light.mutfak_lambasi: {state: "off"}}, expect: {light.mutfak_lambasi: {state: "on"}}}
+
+  # --- E. Bulunduğun oda (uydu cihazı) ---
+  - {group: burada, text: "ışığı aç", intent: HassTurnOn, device: true, slots: {domain: light}, setup: {light.salon_lambasi: {state: "off"}, light.mutfak_lambasi: {state: "off"}}, expect: {light.salon_lambasi: {state: "on"}, light.mutfak_lambasi: {state: "off"}}}
+  - {group: burada, text: "lambayı söndürür müsün", intent: HassTurnOff, device: true, slots: {domain: light}, setup: {light.salon_lambasi: {state: "on"}}, expect: {light.salon_lambasi: {state: "off"}}}
+  - {group: burada, text: "ışıkları kapatır mısın", intent: HassTurnOff, device: true, setup: {light.salon_lambasi: {state: "on"}}, expect: {light.salon_lambasi: {state: "off"}}}
+  - {group: burada, text: "ışığı aç", intent: null, note: "uydu yoksa oda bilinmez, hiçbir şey yapmamalı"}
+
+  # --- F. Kat ve tüm ev ---
+  - {group: kat-ev, text: "üst kattaki ışıkları kapat", intent: HassTurnOff, slots: {floor: Üst Kat}, setup: {light.abajur: {state: "on"}}, expect: {light.abajur: {state: "off"}}}
+  - {group: kat-ev, text: "zemin katın ışıklarını aç", intent: HassTurnOn, slots: {floor: Zemin Kat}, setup: {light.mutfak_lambasi: {state: "off"}}, expect: {light.mutfak_lambasi: {state: "on"}}}
+  - {group: kat-ev, text: "evdeki bütün ışıkları aç", intent: HassTurnOn, setup: {light.abajur: {state: "off"}, light.mutfak_lambasi: {state: "off"}}, expect: {light.abajur: {state: "on"}, light.mutfak_lambasi: {state: "on"}}}
+  - {group: kat-ev, text: "tüm ışıkları kapatır mısın", intent: HassTurnOff, setup: {light.abajur: {state: "on"}, light.mutfak_lambasi: {state: "on"}}, expect: {light.abajur: {state: "off"}, light.mutfak_lambasi: {state: "off"}}}
+
+  # --- G. Parlaklık ---
+  - {group: parlaklik, text: "avizeyi yüzde 50 yap", intent: HassLightSet, slots: {name: Avize, brightness: 50}, setup: {light.avize: {state: "on", attrs: {brightness: 255}}}, expect: {light.avize: {attrs: {brightness: 128}}}}
+  - {group: parlaklik, text: "avizenin parlaklığını %30 yap", intent: HassLightSet, slots: {brightness: 30}, setup: {light.avize: {state: "on", attrs: {brightness: 255}}}, expect: {light.avize: {attrs: {brightness: 77}}}}
+  - {group: parlaklik, text: "salonun ışığını yüzde 40'a getir", intent: HassLightSet, slots: {area: Salon, brightness: 40}, setup: {light.salon_lambasi: {state: "on", attrs: {brightness: 255}}}, expect: {light.salon_lambasi: {attrs: {brightness: 102}}}}
+  - {group: parlaklik, text: "mutfağın ışığını kıs", intent: HassLightSet, slots: {area: Mutfak, brightness: 30}, setup: {light.mutfak_lambasi: {state: "on", attrs: {brightness: 255}}}, expect: {light.mutfak_lambasi: {attrs: {brightness: 77}}}}
+  - {group: parlaklik, text: "ışığı kısar mısın", intent: HassLightSet, device: true, slots: {brightness: 30}, setup: {light.salon_lambasi: {state: "on", attrs: {brightness: 255}}}, expect: {light.salon_lambasi: {attrs: {brightness: 77}}}}
+  - {group: parlaklik, text: "avizeyi en yükseğe al", intent: HassLightSet, slots: {name: Avize, brightness: 100}, setup: {light.avize: {state: "on", attrs: {brightness: 10}}}, expect: {light.avize: {attrs: {brightness: 255}}}}
+  - {group: parlaklik, text: "parlaklığı yarıya getir", intent: null, note: "yarıya kalıbı <isik_ad> ister; parlaklık sözcüğüyle tek başına tanımsız"}
+
+  - {group: sayi-yazi, text: "avizeyi yüzde elli yap", intent: HassLightSet, slots: {name: Avize, brightness: 50}, setup: {light.avize: {state: "on", attrs: {brightness: 255}}}, expect: {light.avize: {attrs: {brightness: 128}}}}
+  - {group: sayi-yazi, text: "salonun sıcaklığını yirmi iki yap", intent: HassClimateSetTemperature, slots: {area: Salon, temperature: 22}, expect: {climate.salon_klimasi: {attrs: {temperature: 22}}}}
+  - {group: sayi-yazi, text: "bir saatlik zamanlayıcı kur", intent: HassStartTimer, device: true, slots: {hours: 1}, first: ["tüm zamanlayıcıları iptal et"]}
+  - {group: sayi-yazi, text: "salon perdesini yüzde ellisine kadar aç", intent: HassSetPosition, slots: {position: 50}, setup: {cover.salon_perdesi: {state: "closed"}}, expect: {cover.salon_perdesi: {attrs: {current_position: 50}}}}
+  - {group: sayi-yazi, text: "beş dakikalık zamanlayıcı kur", intent: HassStartTimer, device: true, slots: {minutes: 5}, first: ["tüm zamanlayıcıları iptal et"]}
+
+  # --- H. Renk ve ton ---
+  - {group: renk, text: "avizeyi kırmızı yap", intent: HassLightSet, slots: {name: Avize, color: red}, setup: {light.avize: {state: "on"}}, expect: {light.avize: {attrs: {rgb_color: [255, 0, 0]}}}}
+  - {group: renk, text: "salonun ışığını maviye çevir", intent: HassLightSet, slots: {area: Salon, color: blue}, setup: {light.salon_lambasi: {state: "on"}}, expect: {light.salon_lambasi: {attrs: {rgb_color: [0, 0, 255]}}}}
+  - {group: renk, text: "ışığı yeşil yak", intent: HassLightSet, device: true, slots: {color: green}, setup: {light.salon_lambasi: {state: "on"}}, expect: {light.salon_lambasi: {attrs: {rgb_color: [0, 128, 0]}}}}
+  - {group: renk, text: "abajuru sıcak beyaz yap", intent: HassLightSet, slots: {name: Abajur, temperature: 2700}, setup: {light.abajur: {state: "on"}}, expect: {light.abajur: {attrs: {color_temp_kelvin: 2700}}}}
+
+  # --- I. Sıcaklık ---
+  - {group: iklim, text: "salonun sıcaklığını 22 yap", intent: HassClimateSetTemperature, slots: {area: Salon, temperature: 22}, expect: {climate.salon_klimasi: {attrs: {temperature: 22}}}}
+  - {group: iklim, text: "salon kliması 24 derece yap", intent: HassClimateSetTemperature, slots: {temperature: 24}, expect: {climate.salon_klimasi: {attrs: {temperature: 24}}}}
+  - {group: iklim, text: "salon klimasını 23 dereceye getir", intent: HassClimateSetTemperature, slots: {temperature: 23}, expect: {climate.salon_klimasi: {attrs: {temperature: 23}}}}
+  - {group: iklim, text: "sıcaklığı 21 yap", intent: HassClimateSetTemperature, device: true, slots: {temperature: 21}, expect: {climate.salon_klimasi: {attrs: {temperature: 21}}}}
+  - {group: iklim, text: "22 buçuk derece yap", intent: HassClimateSetTemperature, device: true, slots: {temperature: 22.5}, expect: {climate.salon_klimasi: {attrs: {temperature: 22.5}}}}
+  - {group: iklim, text: "salon kaç derece oldu", intent: HassClimateGetTemperature, slots: {area: Salon}, say: "23"}
+  - {group: iklim, text: "salonun sıcaklığı kaç", intent: HassClimateGetTemperature, slots: {area: Salon}, say: "23"}
+  - {group: iklim, text: "burası kaç derece", intent: HassClimateGetTemperature, device: true, say: "23"}
+  - {group: iklim, text: "evin sıcaklığı kaç", intent: HassClimateGetTemperature, say: "23"}
+  - {group: iklim, text: "salonun kliması kapatılsın", intent: HassTurnOff, slots: {area: Salon, domain: climate}, setup: {climate.salon_klimasi: {state: "heat"}}, expect: {climate.salon_klimasi: {state: "off"}}}
+  - {group: iklim, text: "klimayı kapat", intent: HassTurnOff, device: true, setup: {climate.salon_klimasi: {state: "heat"}}, expect: {climate.salon_klimasi: {state: "off"}}}
+  - {group: iklim, text: "salonun klimasını aç", intent: HassTurnOn, slots: {area: Salon, domain: climate}, setup: {climate.salon_klimasi: {state: "off"}}, expect: {climate.salon_klimasi: {state: "heat"}}}
+  - {group: iklim, text: "salon klimasının fanını otomatik yap", intent: HassClimateSetFanMode, slots: {fan_mode: auto}, setup: {climate.salon_klimasi: {attrs: {fan_mode: high}}}, expect: {climate.salon_klimasi: {attrs: {fan_mode: auto}}}}
+
+  # --- J. Fan ---
+  - {group: fan, text: "tavan fanını yüzde 40 yap", intent: HassFanSetSpeed, slots: {name: Tavan Fanı, percentage: 40}, setup: {fan.tavan_fani: {state: "on"}}, expect: {fan.tavan_fani: {attrs: {percentage: 40}}}}
+  - {group: fan, text: "yatak odasının fanını %70'e ayarla", intent: HassFanSetSpeed, slots: {area: Yatak Odası, percentage: 70}, setup: {fan.tavan_fani: {state: "on"}}, expect: {fan.tavan_fani: {attrs: {percentage: 70}}}}
+  - {group: fan, text: "yatak odasının fanını kapat", intent: HassTurnOff, slots: {area: Yatak Odası}, setup: {fan.tavan_fani: {state: "on"}}, expect: {fan.tavan_fani: {state: "off"}}}
+
+  - {group: fan, text: "tavan fanını durdur", intent: HassTurnOff, slots: {name: Tavan Fanı}, setup: {fan.tavan_fani: {state: "on"}}, expect: {fan.tavan_fani: {state: "off"}}}
+  - {group: fan, text: "tavan fanını hızlandırır mısın", intent: HassFanSetSpeed, slots: {percentage: 100}, setup: {fan.tavan_fani: {state: "on"}}, expect: {fan.tavan_fani: {attrs: {percentage: 100}}}}
+
+  # --- K. Perde ---
+  - {group: perde, text: "salon perdesini yüzde 30 aç", intent: HassSetPosition, slots: {name: Salon Perdesi, position: 30}, setup: {cover.salon_perdesi: {state: "closed"}}, expect: {cover.salon_perdesi: {attrs: {current_position: 30}}}}
+  - {group: perde, text: "salonun perdesini yarıya indir", intent: HassSetPosition, slots: {area: Salon, position: 50}, setup: {cover.salon_perdesi: {state: "open"}}, expect: {cover.salon_perdesi: {attrs: {current_position: 50}}}}
+  - {group: perde, text: "salonun perdesini aç", intent: HassTurnOn, slots: {area: Salon, device_class: curtain}, setup: {cover.salon_perdesi: {state: "closed"}}, expect: {cover.salon_perdesi: {state: "open"}}}
+  - {group: perde, text: "mutfağın panjurunu indir", intent: HassTurnOff, slots: {area: Mutfak}, setup: {cover.panjur: {state: "open"}}, expect: {cover.panjur: {state: "closed"}}}
+  - {group: perde, text: "perdeleri açar mısın", intent: HassTurnOn, device: true, setup: {cover.salon_perdesi: {state: "closed"}}, expect: {cover.salon_perdesi: {state: "open"}}}
+
+  # --- L. Durum sorguları ---
+  - {group: durum, text: "avize açık mı", intent: HassGetState, slots: {name: Avize, state: "on"}, setup: {light.avize: {state: "on"}}, say: "Evet"}
+  - {group: durum, text: "avize kapalı mı", intent: HassGetState, slots: {name: Avize, state: "off"}, setup: {light.avize: {state: "on"}}, say: "Hayır"}
+  - {group: durum, text: "avize yanıyor mu", intent: HassGetState, slots: {name: Avize, state: "on"}, setup: {light.avize: {state: "off"}}, say: "Hayır"}
+  - {group: durum, text: "salonda açık ışık var mı", intent: HassGetState, slots: {area: Salon, domain: light, state: "on"}, setup: {light.salon_lambasi: {state: "on"}, light.avize: {state: "off"}, light.tavan_isigi: {state: "off"}}, say: "Salon Lambası"}
+  - {group: durum, text: "hangi ışıklar açık", intent: HassGetState, slots: {domain: light, state: "on"}, setup: {light.salon_lambasi: {state: "on"}, light.avize: {state: "off"}, light.tavan_isigi: {state: "off"}, light.mutfak_lambasi: {state: "off"}, light.abajur: {state: "off"}}, say: "Salon Lambası"}
+  - {group: durum, text: "kaç ışık açık", intent: HassGetState, slots: {domain: light, state: "on"}, setup: {light.salon_lambasi: {state: "on"}, light.avize: {state: "off"}, light.tavan_isigi: {state: "off"}, light.mutfak_lambasi: {state: "on"}, light.abajur: {state: "off"}}, say: "2"}
+  - {group: durum, text: "bütün ışıklar kapalı mı", intent: HassGetState, slots: {domain: light, state: "off"}, setup: {light.salon_lambasi: {state: "off"}, light.avize: {state: "off"}, light.tavan_isigi: {state: "off"}, light.mutfak_lambasi: {state: "off"}, light.abajur: {state: "off"}}, say: "Evet"}
+  - {group: durum, text: "salon perdesi açık mı", intent: HassGetState, slots: {name: Salon Perdesi, state: open}, setup: {cover.salon_perdesi: {state: "open"}}, say: "Evet"}
+  - {group: durum, text: "salon penceresi açık mı", intent: HassGetState, slots: {name: Salon Penceresi, state: "on"}, say: "Hayır"}
+  - {group: durum, text: "ön kapı kilitli mi", intent: HassGetState, slots: {name: Ön Kapı, state: locked}, setup: {lock.on_kapi: {state: "locked"}}, say: "Evet", expect: {lock.on_kapi: {state: locked}}}
+  - {group: durum, text: "salon nem sensörü kaç", intent: HassGetState, slots: {name: Salon Nem Sensörü}, say: "45"}
+  - {group: durum, text: "salonun nemi kaç", intent: HassGetState, slots: {area: Salon, device_class: humidity}, say: "45"}
+  - {group: durum, text: "mutfağın nemi ne kadar", intent: HassGetState, slots: {area: Mutfak, device_class: humidity}, say: "60"}
+  - {group: durum, text: "salon sıcaklık sensörü kaç derece", intent: HassGetState, slots: {name: Salon Sıcaklık Sensörü}, say: "23"}
+  - {group: durum, text: "mutfakta hareket var mı", intent: HassGetState, slots: {area: Mutfak, device_class: motion}, say: "Hayır"}
+  - {group: durum, text: "televizyon ne durumda", intent: HassGetState, slots: {name: Televizyon}, setup: {media_player.televizyon: {state: "playing"}}, say: "çalıyor"}
+
+  # --- M. Medya ---
+  - {group: medya, text: "müziği durdur", intent: HassMediaPause, device: true, setup: {media_player.televizyon: {state: "playing"}}, expect: {media_player.televizyon: {state: paused}}}
+  - {group: medya, text: "hoparlörden devam et", intent: HassMediaUnpause, slots: {name: Hoparlör}, setup: {media_player.hoparlor: {state: "paused"}}, expect: {media_player.hoparlor: {state: playing}}}
+  - {group: medya, text: "televizyonu duraklat", intent: HassMediaPause, slots: {name: Televizyon}, setup: {media_player.televizyon: {state: "playing"}}, expect: {media_player.televizyon: {state: paused}}}
+  - {group: medya, text: "müziğe devam et", intent: HassMediaUnpause, device: true, setup: {media_player.televizyon: {state: "paused"}}, expect: {media_player.televizyon: {state: playing}}}
+  - {group: medya, text: "sonraki şarkıya geç", intent: HassMediaNext, device: true, setup: {media_player.televizyon: {state: "playing", attrs: {media_title: "1"}}}, expect: {media_player.televizyon: {attrs: {media_title: sonraki}}}}
+  - {group: medya, text: "hoparlörde önceki şarkıya dön", intent: HassMediaPrevious, slots: {name: Hoparlör}, setup: {media_player.hoparlor: {state: "playing", attrs: {media_title: "1"}}}, expect: {media_player.hoparlor: {attrs: {media_title: onceki}}}}
+  - {group: medya, text: "sesi yüzde 30 yap", intent: HassSetVolume, device: true, slots: {volume_level: 30}, setup: {media_player.televizyon: {state: "playing", attrs: {volume_level: 0.9}}}, expect: {media_player.televizyon: {attrs: {volume_level: 0.3}}}}
+  - {group: medya, text: "televizyonun sesini 20 yap", intent: HassSetVolume, slots: {name: Televizyon, volume_level: 20}, setup: {media_player.televizyon: {state: "playing"}}, expect: {media_player.televizyon: {attrs: {volume_level: 0.2}}}}
+  - {group: medya, text: "televizyonun sesini kıs", intent: HassSetVolumeRelative, slots: {name: Televizyon, volume_step: down}, setup: {media_player.televizyon: {state: "playing", attrs: {volume_level: 0.5}}}}
+  - {group: medya, text: "sesi artır", intent: HassSetVolumeRelative, device: true, slots: {volume_step: up}, setup: {media_player.televizyon: {state: "playing", attrs: {volume_level: 0.5}}}}
+  - {group: medya, text: "televizyonu sessize al", intent: HassMediaPlayerMute, slots: {name: Televizyon}, setup: {media_player.televizyon: {state: "playing", attrs: {is_volume_muted: false}}}, expect: {media_player.televizyon: {attrs: {is_volume_muted: true}}}}
+
+  - {group: medya, text: "televizyonu sessizden çıkar", intent: HassMediaPlayerUnmute, slots: {name: Televizyon}, setup: {media_player.televizyon: {state: "playing", attrs: {is_volume_muted: true}}}, expect: {media_player.televizyon: {attrs: {is_volume_muted: false}}}}
+  - {group: medya, text: "salonun sesini kıs", intent: HassSetVolumeRelative, slots: {area: Salon, volume_step: down}, setup: {media_player.televizyon: {state: "playing", attrs: {volume_level: 0.5}}}}
+
+  # --- N. Süpürge, sahne, komut dosyası ---
+  - {group: diger, text: "robot süpürgeyi başlat", intent: HassVacuumStart, slots: {name: Robot Süpürge}, setup: {vacuum.robot_supurge: {state: "docked"}}, expect: {vacuum.robot_supurge: {state: cleaning}}}
+  - {group: diger, text: "robot süpürgeyi istasyona gönder", intent: HassVacuumReturnToBase, slots: {name: Robot Süpürge}, setup: {vacuum.robot_supurge: {state: "cleaning"}}, expect: {vacuum.robot_supurge: {state: returning}}}
+  - {group: diger, text: "süpürgeyi temizliğe başlat", intent: HassVacuumStart, setup: {vacuum.robot_supurge: {state: "docked"}}, expect: {vacuum.robot_supurge: {state: cleaning}}}
+  - {group: diger, text: "salonu süpür", intent: HassVacuumStart, slots: {area: Salon}, setup: {vacuum.robot_supurge: {state: "docked"}}, expect: {vacuum.robot_supurge: {state: cleaning}}}
+  - {group: diger, text: "film gecesi modunu aç", intent: HassTurnOn, slots: {name: Film Gecesi}, setup: {light.abajur: {state: "off"}}, expect: {light.abajur: {state: "on"}}}
+  - {group: diger, text: "film gecesini başlat", intent: HassTurnOn, slots: {name: Film Gecesi}, setup: {light.abajur: {state: "off"}}, expect: {light.abajur: {state: "on"}}}
+  - {group: diger, text: "gece düzenini çalıştır", intent: HassTurnOn, slots: {name: Gece Düzeni}, setup: {light.salon_lambasi: {state: "on"}}, expect: {light.salon_lambasi: {state: "off"}}}
+
+  # --- O. Saat, tarih, hava, liste, sohbet ---
+  - {group: genel, text: "saat kaç", intent: HassGetCurrentTime, say: "Saat"}
+  - {group: genel, text: "saati söyler misin", intent: HassGetCurrentTime, say: "Saat"}
+  - {group: genel, text: "bugünün tarihi ne", intent: HassGetCurrentDate, say_any: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]}
+  - {group: genel, text: "bugün günlerden ne", intent: HassGetCurrentDate, say_any: ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"]}
+  - {group: genel, text: "hava nasıl", intent: HassGetWeather, say: "parçalı bulutlu"}
+  - {group: genel, text: "bugün hava durumu nasıl", intent: HassGetWeather, say: "18"}
+  - {group: genel, text: "alışveriş listesine süt ekle", intent: HassShoppingListAddItem, slots: {item: süt}, say: "süt"}
+  - {group: genel, text: "ekmek alışveriş listesine yazar mısın", intent: HassShoppingListAddItem, slots: {item: ekmek}, say: "ekmek"}
+  - {group: genel, text: "alışveriş listesinde süt tamamlandı", intent: HassShoppingListCompleteItem, slots: {item: süt}, say: "süt"}
+  - {group: genel, text: "boş ver", intent: HassNevermind}
+  - {group: genel, text: "vazgeçtim", intent: HassNevermind}
+  - {group: genel, text: "teşekkürler", intent: HassRespond, say: "Rica"}
+
+  # --- P. Zamanlayıcı (uydu cihazı gerekir) ---
+  - {group: zamanlayici, text: "10 dakikaya zamanlayıcı kur", intent: HassStartTimer, device: true, slots: {minutes: 10}, say: "10 dakika", first: ["tüm zamanlayıcıları iptal et"]}
+  - {group: zamanlayici, text: "zamanlayıcıda ne kadar kaldı", intent: HassTimerStatus, device: true, say: "kaldı"}
+  - {group: zamanlayici, text: "zamanlayıcıyı duraklat", intent: HassPauseTimer, device: true, say: "duraklatıldı"}
+  - {group: zamanlayici, text: "zamanlayıcıya devam et", intent: HassUnpauseTimer, device: true, say: "devam"}
+  - {group: zamanlayici, text: "zamanlayıcıya 5 dakika ekle", intent: HassIncreaseTimer, device: true, slots: {minutes: 5}}
+  - {group: zamanlayici, text: "sayaçtan 2 dakika çıkar", intent: HassDecreaseTimer, device: true, slots: {minutes: 2}}
+  - {group: zamanlayici, text: "1 saat 30 dakikalık zamanlayıcı kur", intent: HassStartTimer, device: true, slots: {hours: 1, minutes: 30}, say: "1 saat 30 dakika", first: ["tüm zamanlayıcıları iptal et"]}
+  - {group: zamanlayici, text: "5 dakika sonra haber ver", intent: HassStartTimer, device: true, slots: {minutes: 5}, say: "5 dakika", first: ["tüm zamanlayıcıları iptal et"]}
+
+  # --- R. Otomasyon örnekleri (examples/otomasyonlar.yaml) ---
+  - {group: otomasyon, text: "iyi geceler", intent: sentence_trigger, say: "İyi geceler", setup: {light.salon_lambasi: {state: "on"}}, expect: {light.salon_lambasi: {state: "off"}}}
+  - {group: otomasyon, text: "İyi geceler.", intent: sentence_trigger, say: "İyi geceler", setup: {light.salon_lambasi: {state: "on"}}, expect: {light.salon_lambasi: {state: "off"}}}
+  - {group: otomasyon, text: "evden çıkıyorum", intent: sentence_trigger, say: "Görüşürüz", setup: {switch.kahve_makinesi: {state: "on"}}, expect: {switch.kahve_makinesi: {state: "off"}}}
+  - {group: otomasyon, text: "çok üşüyorum", intent: sentence_trigger, say: "24", expect: {climate.salon_klimasi: {attrs: {temperature: 24}}}}
+
+  # --- S. Güvenlik: paket kilidi açmamalı, alarmı kapatmamalı ---
+  - {group: guvenlik, text: "ön kapıyı aç", intent: null, setup: {lock.on_kapi: {state: "locked"}}, expect: {lock.on_kapi: {state: locked}}}
+  - {group: guvenlik, text: "ön kapıyı kapat", intent: null, setup: {lock.on_kapi: {state: "locked"}}, expect: {lock.on_kapi: {state: locked}}}
+  - {group: guvenlik, text: "ön kapıyı açar mısın", intent: null, setup: {lock.on_kapi: {state: "locked"}}, expect: {lock.on_kapi: {state: locked}}}
+  - {group: guvenlik, text: "ön kapıyı kapatır mısın", intent: null, setup: {lock.on_kapi: {state: "locked"}}, expect: {lock.on_kapi: {state: locked}}}
+  - {group: guvenlik, text: "ev alarmını kapat", intent: null, setup: {alarm_control_panel.ev_alarmi: {state: "armed_away"}}, expect: {alarm_control_panel.ev_alarmi: {state: armed_away}}}
+  - {group: guvenlik, text: "ev alarmını kapatır mısın", intent: null, setup: {alarm_control_panel.ev_alarmi: {state: "armed_away"}}, expect: {alarm_control_panel.ev_alarmi: {state: armed_away}}}
+  - {group: guvenlik, text: "alarmı kapat", intent: null, setup: {alarm_control_panel.ev_alarmi: {state: "armed_away"}}, expect: {alarm_control_panel.ev_alarmi: {state: armed_away}}}
+  - {group: guvenlik, text: "garaj kapısını açar mısın", intent: null, setup: {cover.garaj_kapisi: {state: "closed"}}, expect: {cover.garaj_kapisi: {state: closed}}}
+  - {group: guvenlik, text: "garaj kapısını yüzde 50 aç", intent: null, setup: {cover.garaj_kapisi: {state: "closed"}}, expect: {cover.garaj_kapisi: {state: closed}}}
+
+  # --- S2. Bilgi: bunlar paketten değil, üst projeden gelir. Kilit elle Assist'e
+  # açıldıysa kilit gerçekten açılır. README'de uyarı var.
+  - {group: ust-proje-risk, text: "ön kapının kilidini aç", intent: HassTurnOff, note: "üst proje davranışı", setup: {lock.on_kapi: {state: "locked"}}, expect: {lock.on_kapi: {state: unlocked}}}
+  - {group: ust-proje-risk, text: "garaj kapısını aç", intent: HassTurnOn, note: "üst proje davranışı", device: true, setup: {cover.garaj_kapisi: {state: "closed"}}}
+
+  # --- S3. Yanlış eşleşme olmamalı ---
+  - {group: yanlis-eslesme, text: "salon çok güzel olmuş", intent: null}
+  - {group: yanlis-eslesme, text: "bugün yemek ne", intent: null}
+  - {group: yanlis-eslesme, text: "kapıyı çal", intent: null}
+  - {group: yanlis-eslesme, text: "ışık hızı kaç", intent: null}
+  - {group: yanlis-eslesme, text: "salon lambası kırıldı", intent: null}
+  - {group: yanlis-eslesme, text: "ben gidiyorum", intent: null}
+  - {group: yanlis-eslesme, text: "televizyonda ne var", intent: null}
+  - {group: yanlis-eslesme, text: "mutfakta yemek yap", intent: null}
+  - {group: yanlis-eslesme, text: "ses", intent: null}
+  - {group: yanlis-eslesme, text: "aç", intent: null}
+
+  # --- T. Üst proje gerilemesi: paket var olan davranışı bozmamalı ---
+  - {group: ust-proje, text: "mutfaktaki ışıkları aç", intent: HassTurnOn, slots: {area: Mutfak, domain: light}, setup: {light.mutfak_lambasi: {state: "off"}}, expect: {light.mutfak_lambasi: {state: "on"}}}
+  - {group: ust-proje, text: "salon lambasını kapat", intent: HassTurnOff, slots: {name: Salon Lambası}, setup: {light.salon_lambasi: {state: "on"}}, expect: {light.salon_lambasi: {state: "off"}}}
+  - {group: ust-proje, text: "salonu 25 dereceye ayarla", intent: HassClimateSetTemperature, slots: {area: Salon, temperature: 25}, expect: {climate.salon_klimasi: {attrs: {temperature: 25}}}}
+  - {group: ust-proje, text: "salon kaç derece", intent: HassClimateGetTemperature, slots: {area: Salon}, say: "23"}
+  - {group: ust-proje, text: "10 dakikalık zamanlayıcı kur", intent: HassStartTimer, device: true, slots: {minutes: 10}, first: ["tüm zamanlayıcıları iptal et"]}
+  - {group: ust-proje, text: "önemli değil", intent: HassNevermind}
+  - {group: ust-proje, text: "evdeki bütün ışıkları kapat", intent: HassTurnOff, setup: {light.abajur: {state: "on"}}, expect: {light.abajur: {state: "off"}}}
+  - {group: ust-proje, text: "perdeleri kapat", intent: HassTurnOff, device: true, setup: {cover.salon_perdesi: {state: "open"}}, expect: {cover.salon_perdesi: {state: closed}}}

@@ -1,0 +1,205 @@
+# Made By FALCREB
+# Sıcaklık, fan hızı, perde konumu ve süpürge.
+# Üst projede: sıcaklık için yalnızca "dereceye ayarla" ve "kaç derece" kalıbı var.
+# Fan hızı, perde konumu ve süpürge için Türkçe cümle yoktur.
+language: "tr"
+
+intents:
+  HassClimateSetTemperature:
+    data:
+      # "salonun sıcaklığını 22 yap", "salon 22 buçuk dereceye getir"
+      - sentences:
+          - "<alan> [<sicaklik_ad>] {temperature}[<sayi_eki>] [<derece>] <ayarla_fiil>"
+          - "<alan> [<sicaklik_ad>] {tr_bucuklu:temperature} [<derece>] <ayarla_fiil>"
+          - "<alan> <klima_ad> {temperature}[<sayi_eki>] [<derece>] <ayarla_fiil>"
+          - "<alan> <klima_ad> {tr_bucuklu:temperature} [<derece>] <ayarla_fiil>"
+        response: "sicaklik"
+      # "salon kliması 24 derece yap": ada göre
+      - sentences:
+          - "<cihaz> {temperature}[<sayi_eki>] [<derece>] <ayarla_fiil>"
+          - "<cihaz> {tr_bucuklu:temperature} [<derece>] <ayarla_fiil>"
+          - "<cihaz> [<sicaklik_ad>] {temperature}[<sayi_eki>] [<derece>] <ayarla_fiil>"
+        requires_context:
+          domain:
+            - "climate"
+        response: "sicaklik"
+      # "sıcaklığı 22 yap", "22 derece yap", "klimayı 22 dereceye getir": bulunduğun oda
+      - sentences:
+          - "<sicaklik_ad> {temperature}[<sayi_eki>] [<derece>] <ayarla_fiil>"
+          - "<sicaklik_ad> {tr_bucuklu:temperature} [<derece>] <ayarla_fiil>"
+          - "{temperature} <derece> <ayarla_fiil>"
+          - "{tr_bucuklu:temperature} <derece> <ayarla_fiil>"
+          - "<klima_ad> {temperature}[<sayi_eki>] [<derece>] <ayarla_fiil>"
+          - "<klima_ad> {tr_bucuklu:temperature} [<derece>] <ayarla_fiil>"
+        requires_context:
+          area:
+            slot: true
+        response: "sicaklik"
+
+  HassClimateGetTemperature:
+    data:
+      - sentences:
+          - "<alan> (<sicaklik_ad>) kaç [oldu|derece]"
+          - "<alan> hava kaç derece"
+          - "<alan> (kaç derece|kaç derece oldu|ne kadar sıcak|sıcaklık durumu ne)"
+          - "<alan> <klima_ad> kaç derece"
+        response: "sicaklik_soru"
+      - sentences:
+          - "{name}[<ek>] (kaç derece|kaç derece oldu|sıcaklığı kaç|sıcaklığı ne kadar|sıcaklığı kaç derece)"
+        requires_context:
+          domain:
+            - "climate"
+        response: "sicaklik_soru"
+      - sentences:
+          - "(klimanın|kombinin|termostatın) sıcaklığı (kaç|kaç derece|ne kadar)"
+          - "(burası|burada|içerisi) kaç derece"
+        requires_context:
+          area:
+            slot: true
+        response: "sicaklik_soru"
+      - sentences:
+          - "(evin sıcaklığı|ev sıcaklığı|içerisi|içeride sıcaklık) (kaç|kaç derece|ne kadar)"
+          - "ev kaç derece"
+        response: "sicaklik_soru"
+
+  HassClimateSetFanMode:
+    data:
+      - sentences:
+          - "<alan> <klima_ad> (fan|fanı|fanını|fan modunu|fan hızını) {tr_fan_modu:fan_mode} <ayarla_fiil>"
+          - "<alan> (klima fanı|klima fanını|klimanın fanını) {tr_fan_modu:fan_mode} <ayarla_fiil>"
+        response: "default"
+      - sentences:
+          - "<cihaz> (fan|fanı|fanını|fan modunu|fan hızını) {tr_fan_modu:fan_mode} <ayarla_fiil>"
+        requires_context:
+          domain:
+            - "climate"
+        response: "default"
+
+  HassFanSetSpeed:
+    data:
+      - sentences:
+          - "<cihaz> [(hız|hızı|hızını)] <yuzde>{fan_speed:percentage}[<sayi_eki>] <ayarla_fiil>"
+          - "<cihaz> (hız|hızı|hızını) {fan_speed:percentage}[<sayi_eki>] <ayarla_fiil>"
+          - "<cihaz> {tr_seviye:percentage} <ayarla_fiil>"
+        requires_context:
+          domain:
+            - "fan"
+        response: "default"
+      # Göreli hız niyeti yok: "yavaşlat" sabit %30, "hızlandır" sabit %100.
+      - sentences:
+          - "<cihaz> (yavaşlat|yavaşlatır mısın)"
+        requires_context:
+          domain:
+            - "fan"
+        slots:
+          percentage: 30
+        response: "default"
+      - sentences:
+          - "<cihaz> (hızlandır|hızlandırır mısın)"
+        requires_context:
+          domain:
+            - "fan"
+        slots:
+          percentage: 100
+        response: "default"
+      - sentences:
+          - "<alan> <fan_ad> [(hız|hızı|hızını)] <yuzde>{fan_speed:percentage}[<sayi_eki>] <ayarla_fiil>"
+          - "<alan> <fan_ad> (hız|hızı|hızını) {fan_speed:percentage}[<sayi_eki>] <ayarla_fiil>"
+          - "<alan> <fan_ad> {tr_seviye:percentage} <ayarla_fiil>"
+        response: "default"
+      - sentences:
+          - "<fan_ad> [(hız|hızı|hızını)] <yuzde>{fan_speed:percentage}[<sayi_eki>] [(hıza|hızına)] <ayarla_fiil>"
+          - "<fan_ad> (hız|hızı|hızını) {fan_speed:percentage}[<sayi_eki>] <ayarla_fiil>"
+          - "<fan_ad> {tr_seviye:percentage} <ayarla_fiil>"
+        requires_context:
+          area:
+            slot: true
+        response: "default"
+
+  HassSetPosition:
+    data:
+      # Ada göre. Garaj ve kapı türü dışarıda bırakıldı.
+      - sentences:
+          - "<cihaz> [(konumu|konumunu)] <yuzde>{position}[<sayi_eki>] [(kadar|konuma|konumuna)] (<ayarla_fiil>|aç|açar mısın|indir|indirir misin|kaldır)"
+          - "<cihaz> {tr_seviye:position} (<ayarla_fiil>|aç|açar mısın|indir|indirir misin|kaldır)"
+        requires_context:
+          domain:
+            - "cover"
+        excludes_context:
+          device_class:
+            - "garage"
+            - "door"
+            - "gate"
+        response: "default"
+      # Odaya ve türe göre
+      - sentences:
+          - "<alan> [<tum>] {tr_kapak:device_class} <yuzde>{position}[<sayi_eki>] [kadar] (<ayarla_fiil>|aç|açar mısın|indir|indirir misin|kaldır)"
+          - "<alan> [<tum>] {tr_kapak:device_class} {tr_seviye:position} (<ayarla_fiil>|aç|açar mısın|indir|indirir misin|kaldır)"
+        slots:
+          domain: "cover"
+        response: "default"
+      # Bulunduğun oda
+      - sentences:
+          - "[<tum>] {tr_kapak:device_class} <yuzde>{position}[<sayi_eki>] (<ayarla_fiil>|aç|açar mısın|indir|indirir misin|kaldır)"
+          - "[<tum>] {tr_kapak:device_class} {tr_seviye:position} (<ayarla_fiil>|aç|açar mısın|indir|indirir misin|kaldır)"
+        slots:
+          domain: "cover"
+        requires_context:
+          area:
+            slot: true
+        response: "default"
+
+  HassVacuumStart:
+    data:
+      - sentences:
+          - "<cihaz> [(temizliğe|süpürmeye)] (<baslat_fiil>|çalıştır)"
+          - "<baslat_fiil> <cihaz>"
+        requires_context:
+          domain:
+            - "vacuum"
+        response: "default"
+      - sentences:
+          - "<alan> (süpür|süpürür müsün|süpürebilir misin|temizle)"
+        response: "default"
+      # Ad söylenmeden: evdeki süpürge(ler)
+      - sentences:
+          - "(süpürge|süpürgeyi|robot süpürgeyi) [(temizliğe|süpürmeye)] <baslat_fiil>"
+        slots:
+          domain: "vacuum"
+        response: "default"
+
+  HassVacuumReturnToBase:
+    data:
+      - sentences:
+          - "(süpürge|süpürgeyi|robot süpürgeyi) (istasyona|istasyonuna|şarja|şarj istasyonuna|yuvaya|yuvasına|eve) (gönder|yolla|döndür|geri gönder|gönderir misin)"
+        slots:
+          domain: "vacuum"
+        response: "default"
+      - sentences:
+          - "<cihaz> (istasyona|istasyonuna|şarja|şarj istasyonuna|yuvaya|yuvasına|eve|üsse) (gönder|yolla|döndür|geri gönder|gönderir misin)"
+          - "<cihaz> (geri çağır|durdur ve geri gönder)"
+        requires_context:
+          domain:
+            - "vacuum"
+        response: "default"
+
+responses:
+  intents:
+    HassClimateSetTemperature:
+      sicaklik: "Sıcaklık {{ slots.temperature }} derece yapıldı."
+    HassClimateGetTemperature:
+      sicaklik_soru: "{{ state.attributes.get('current_temperature', state.state) }} derece."
+      # Üst projenin yanıtı "{{ state.state }} derece" gerçek bir klima varlığında
+      # "off derece" diyor (2026.10.4 üzerinde görüldü). Bu satır yerleşik
+      # cümlelerin yanıtını da düzeltir.
+      default: "{{ state.attributes.get('current_temperature', state.state) }} derece."
+    HassClimateSetFanMode:
+      default: "Fan modu ayarlandı."
+    HassFanSetSpeed:
+      default: "Fan hızı ayarlandı."
+    HassSetPosition:
+      default: "Konum ayarlandı."
+    HassVacuumStart:
+      default: "Süpürge başlatıldı."
+    HassVacuumReturnToBase:
+      default: "Süpürge istasyona gönderildi."

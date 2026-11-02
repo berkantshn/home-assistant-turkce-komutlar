@@ -1,0 +1,30 @@
+# Made By FALCREB
+# Yalnızca test içindir: tüm cihazlar, odalar ve değerler sahtedir.
+# Keşif (zeroconf, ssdp, dhcp) kapalı kalsın diye default_config bilerek yok;
+# böylece test kapsayıcısı yerel ağdaki cihazları aramaz.
+homeassistant:
+  name: Sahte Test Evi
+  language: tr
+  country: TR
+  time_zone: Europe/Istanbul
+  unit_system: metric
+  currency: TRY
+  latitude: 0
+  longitude: 0
+  elevation: 0
+
+http:
+  server_port: 8123
+
+api:
+websocket_api:
+config:
+onboarding:
+auth:
+conversation:
+intent:
+script: !include scripts.yaml
+automation: !include automations.yaml
+logger:
+  default: warning
+fake_home:

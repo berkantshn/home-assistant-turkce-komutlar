@@ -1,0 +1,167 @@
+# Made By FALCREB
+# Durum sorgulama (HassGetState). Üst projede Türkçe karşılığı yoktur.
+# Tamamen salt okunurdur: "kapı kilitli mi" sorulur, kilit değiştirilmez.
+language: "tr"
+
+intents:
+  HassGetState:
+    data:
+      # --- "salon lambası ne durumda" ---
+      - sentences:
+          - "{name}[<ek>] (ne durumda|nasıl|durumu ne|durumu nedir|durumu nasıl|açık mı kapalı mı)"
+        requires_context:
+          domain:
+            - "light"
+            - "switch"
+            - "fan"
+            - "cover"
+            - "lock"
+            - "valve"
+            - "climate"
+            - "media_player"
+            - "binary_sensor"
+            - "vacuum"
+        response: "bir"
+      # --- "salon nem sensörü kaç" ---
+      - sentences:
+          - "{name} (kaç|kaç oldu|ne kadar|kaç derece|değeri kaç|değeri ne|değeri ne kadar|ne gösteriyor)"
+          - "{name}[<ek>] (ne durumda|nasıl|durumu ne|durumu nedir)"
+        requires_context:
+          domain:
+            - "sensor"
+        response: "deger"
+      # --- "salon lambası açık mı" ---
+      - sentences:
+          - "{name} {tr_acik_kapali:state} (mı|mi|mu|mü)"
+        requires_context:
+          domain:
+            - "light"
+            - "switch"
+            - "fan"
+            - "media_player"
+            - "input_boolean"
+        response: "evet_hayir"
+      # --- Perde, panjur: "salon perdesi açık mı" ---
+      - sentences:
+          - "{name} {tr_kapak_durum:state} (mı|mi|mu|mü)"
+        requires_context:
+          domain:
+            - "cover"
+        response: "evet_hayir"
+      # --- Kapı/pencere sensörü: "salon penceresi açık mı" ---
+      - sentences:
+          - "{name} {tr_sensor_acik:state} (mı|mi|mu|mü)"
+        requires_context:
+          domain:
+            - "binary_sensor"
+        response: "evet_hayir"
+      # --- Kilit (yalnızca soru) ---
+      - sentences:
+          - "{name} {tr_kilit_durum:state} (mı|mi|mu|mü)"
+          - "{name} kilit[li] {tr_kilit_durum:state} (mı|mi|mu|mü)"
+        requires_context:
+          domain:
+            - "lock"
+        response: "evet_hayir"
+
+      # --- "salonda açık ışık var mı" ---
+      - sentences:
+          - "<alan> {tr_acik_kapali:state} (ışık|lamba) var mı"
+          - "<alan> (ışık|ışıklar|lamba|lambalar) {tr_acik_kapali:state} (mı|mi|mu|mü)"
+        slots:
+          domain: "light"
+        response: "herhangi"
+      - sentences:
+          - "(evde|nerede|hiç) {tr_acik_kapali:state} (ışık|lamba) var mı"
+          - "{tr_acik_kapali:state} (ışık|lamba) var mı"
+        slots:
+          domain: "light"
+        response: "herhangi"
+      # --- "bütün ışıklar kapalı mı" ---
+      - sentences:
+          - "(bütün|tüm) (ışıklar|lambalar) {tr_acik_kapali:state} (mı|mi|mu|mü)"
+        slots:
+          domain: "light"
+        response: "hepsi"
+      # --- "hangi ışıklar açık" ---
+      - sentences:
+          - "(hangi|nerede) (ışık|ışıklar|lamba|lambalar) {tr_acik_kapali:state}"
+          - "<alan> (hangi) (ışık|ışıklar|lamba|lambalar) {tr_acik_kapali:state}"
+        slots:
+          domain: "light"
+        response: "hangi"
+      # --- "kaç ışık açık" ---
+      - sentences:
+          - "kaç (ışık|lamba) {tr_acik_kapali:state}"
+          - "<alan> kaç (ışık|lamba) {tr_acik_kapali:state}"
+        slots:
+          domain: "light"
+        response: "kac_tane"
+      # --- "hangi perdeler açık" ---
+      - sentences:
+          - "hangi {tr_kapak:device_class} {tr_kapak_durum:state}"
+          - "<alan> hangi {tr_kapak:device_class} {tr_kapak_durum:state}"
+        slots:
+          domain: "cover"
+        response: "hangi"
+      - sentences:
+          - "<alan> {tr_kapak:device_class} {tr_kapak_durum:state} (mı|mi|mu|mü)"
+        slots:
+          domain: "cover"
+        response: "herhangi"
+
+      # --- Oda bazlı değer: "salonun nemi kaç" ---
+      - sentences:
+          - "<alan> (nem|nemi) [oranı] (kaç|ne kadar|nedir|ne)"
+        slots:
+          domain: "sensor"
+          device_class: "humidity"
+        response: "deger"
+      - sentences:
+          - "<alan> sıcaklık sensörü (kaç|kaç derece|ne kadar|ne gösteriyor)"
+        slots:
+          domain: "sensor"
+          device_class: "temperature"
+        response: "deger"
+      # --- Hareket, pencere ---
+      - sentences:
+          - "<alan> hareket var mı"
+        slots:
+          domain: "binary_sensor"
+          device_class: "motion"
+          state: "on"
+        response: "herhangi"
+      - sentences:
+          - "<alan> (pencere|pencereler) {tr_sensor_acik:state} (mı|mi|mu|mü)"
+        slots:
+          domain: "binary_sensor"
+          device_class: "window"
+        response: "herhangi"
+
+responses:
+  intents:
+    HassGetState:
+      # Durum adları İngilizce gelir; burada Türkçeye çevrilir.
+      bir: >
+        {% set tr = {'on':'açık','off':'kapalı','open':'açık','closed':'kapalı','locked':'kilitli','unlocked':'kilitli değil','playing':'çalıyor','paused':'duraklatıldı','idle':'boşta','docked':'istasyonda','cleaning':'temizlik yapıyor','heat':'ısıtıyor','cool':'soğutuyor','unavailable':'ulaşılamıyor','unknown':'bilinmiyor'} %}
+        {{ slots.name }}: {{ tr.get(state.state, state.state_with_unit) }}.
+      deger: "{{ state.state_with_unit }}"
+      evet_hayir: >
+        {% set tr = {'on':'açık','off':'kapalı','open':'açık','closed':'kapalı','locked':'kilitli','unlocked':'kilitli değil','unavailable':'ulaşılamıyor','unknown':'bilinmiyor'} %}
+        {% if query.matched %}Evet.{% else %}Hayır, {{ tr.get(state.state, state.state) }}.{% endif %}
+      herhangi: >
+        {% if query.matched %}
+          {% set ad = query.matched | map(attribute='name') | sort | list %}
+          Evet: {{ ad[:4] | join(', ') }}{% if ad | length > 4 %} ve {{ ad | length - 4 }} tane daha{% endif %}.
+        {% else %}Hayır.{% endif %}
+      hepsi: >
+        {% if not query.unmatched %}Evet.{% else %}
+          {% set ad = query.unmatched | map(attribute='name') | sort | list %}
+          Hayır, {{ ad[:4] | join(', ') }}{% if ad | length > 4 %} ve {{ ad | length - 4 }} tane daha{% endif %} farklı durumda.
+        {% endif %}
+      hangi: >
+        {% if query.matched %}
+          {% set ad = query.matched | map(attribute='name') | sort | list %}
+          {{ ad[:4] | join(', ') }}{% if ad | length > 4 %} ve {{ ad | length - 4 }} tane daha{% endif %}.
+        {% else %}Hiçbiri.{% endif %}
+      kac_tane: "{{ query.matched | length }} tane."

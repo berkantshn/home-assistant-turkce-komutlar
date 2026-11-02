@@ -1,0 +1,11 @@
+{
+  "domain": "fake_home",
+  "name": "Fake Home (test only)",
+  "codeowners": [],
+  "config_flow": true,
+  "dependencies": ["http", "intent"],
+  "documentation": "https://example.invalid/",
+  "iot_class": "local_push",
+  "requirements": [],
+  "version": "1.0.0"
+}
